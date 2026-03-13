@@ -147,11 +147,17 @@
     animation:pulseGlow 3s ease-in-out infinite; pointer-events:none;
   }
   .back-btn {
-    position:absolute; top:24px; left:24px; background:transparent; border:none; cursor:pointer;
-    color:#441111; font-family:'Special Elite',monospace; font-size:clamp(11px,3vw,14px);
-    letter-spacing:4px; transition:color .15s; z-index:5;
+    position:absolute; top:24px; left:24px; cursor:pointer; z-index:5;
+    color:rgba(255,255,255,0.75); font-family:'Special Elite',monospace; font-size:clamp(12px,3vw,15px);
+    letter-spacing:4px; transition:all .15s;
+    background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.18);
+    border-radius:4px; padding:7px 16px;
+    text-shadow:0 0 10px rgba(255,255,255,0.3);
   }
-  .back-btn:hover{color:#aa2222;}
+  .back-btn:hover,.back-btn:active{
+    color:#fff; background:rgba(255,255,255,0.15); border-color:rgba(255,255,255,0.4);
+    text-shadow:0 0 16px rgba(255,255,255,0.6);
+  }
   .mode-heading {
     font-family:'Creepster',monospace; font-size:clamp(14px,5vw,32px);
     color:#881111; letter-spacing:12px; text-transform:uppercase;
@@ -188,68 +194,68 @@
   @keyframes hcTagPulse{0%,100%{box-shadow:none}50%{box-shadow:0 0 10px rgba(255,100,0,0.3)}}
 
   /* ══ UPDATE NOTES ══ */
-  #notesScreen { background:#060008; overflow:hidden; }
-  #notesScreen::before {
-    content:''; position:absolute; inset:0; pointer-events:none;
-    background:
-      repeating-linear-gradient(0deg,transparent,transparent 47px,rgba(255,0,0,0.03) 47px,rgba(255,0,0,0.03) 48px),
-      repeating-linear-gradient(90deg,transparent,transparent 47px,rgba(255,0,0,0.03) 47px,rgba(255,0,0,0.03) 48px);
+  #notesScreen {
+    background: linear-gradient(160deg,#0a0a2e 0%,#0d001a 40%,#1a000a 100%);
+    overflow:hidden;
   }
-  .notes-bg-glow {
-    position:absolute; width:500px; height:500px; border-radius:50%;
-    background:radial-gradient(circle,rgba(120,0,0,0.12) 0%,transparent 70%);
-    top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:none;
-    animation:pulseGlow 4s ease-in-out infinite;
+  #notesScreen::after {
+    content:''; position:absolute; inset:0; pointer-events:none; z-index:2;
+    background: repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.07) 3px,rgba(0,0,0,0.07) 4px);
   }
+  .notes-blob {
+    position:absolute; border-radius:50%; pointer-events:none; filter:blur(90px); opacity:0.45;
+    animation:blobFloat 8s ease-in-out infinite;
+  }
+  .notes-blob-1 { width:380px;height:380px; background:#ff0055; top:-60px; right:-80px; animation-delay:-1s; }
+  .notes-blob-2 { width:300px;height:300px; background:#7700ff; bottom:0; left:-60px; animation-delay:-4s; }
+  .notes-blob-3 { width:260px;height:260px; background:#00ccff; top:30%; left:20%; animation-delay:-6s; }
   .notes-inner {
-    position:relative; z-index:1;
-    width:min(680px,92vw); max-height:82vh;
+    position:relative; z-index:3;
+    width:min(680px,92vw); max-height:88vh;
     display:flex; flex-direction:column;
   }
   .notes-header {
     display:flex; align-items:baseline; gap:18px;
-    border-bottom:1px solid #2a0808; padding-bottom:16px; margin-bottom:24px; flex-shrink:0;
+    border-bottom:1px solid rgba(255,100,180,0.2); padding-bottom:16px; margin-bottom:24px; flex-shrink:0;
   }
   .notes-title {
     font-family:'Creepster',monospace; font-size:clamp(26px,7vw,48px);
-    color:#cc1111; letter-spacing:8px;
-    text-shadow:0 0 20px #880000;
+    color:#ffffff; letter-spacing:8px;
+    text-shadow:0 0 20px #fff, 0 0 50px rgba(255,100,150,0.7);
   }
   .notes-version-badge {
-    font-size:clamp(9px,2vw,12px); letter-spacing:4px; color:#441111;
-    border:1px solid #2a0808; padding:3px 10px; white-space:nowrap;
+    font-size:clamp(9px,2vw,12px); letter-spacing:4px; color:#ff88aa;
+    border:1px solid rgba(255,100,180,0.3); padding:3px 10px; white-space:nowrap;
   }
   .notes-scroll {
     overflow-y:auto; flex:1;
-    scrollbar-width:thin; scrollbar-color:#331111 transparent;
+    scrollbar-width:thin; scrollbar-color:rgba(255,80,120,0.3) transparent;
     padding-right:8px;
   }
   .notes-scroll::-webkit-scrollbar{width:4px;}
   .notes-scroll::-webkit-scrollbar-track{background:transparent;}
-  .notes-scroll::-webkit-scrollbar-thumb{background:#331111;border-radius:2px;}
+  .notes-scroll::-webkit-scrollbar-thumb{background:rgba(255,80,120,0.3);border-radius:2px;}
   .version-block { margin-bottom:32px; }
   .version-block:last-child{margin-bottom:0;}
   .version-tag {
     font-family:'Creepster',monospace; font-size:clamp(14px,4vw,22px);
-    color:#ff2222; letter-spacing:6px; margin-bottom:4px;
+    color:#ff88aa; letter-spacing:6px; margin-bottom:4px;
     display:flex; align-items:center; gap:12px;
   }
   .version-tag::after {
-    content:''; flex:1; height:1px; background:linear-gradient(to right,#330808,transparent);
+    content:''; flex:1; height:1px; background:linear-gradient(to right,rgba(255,80,120,0.4),transparent);
   }
-  .version-date { font-size:clamp(8px,2vw,10px); color:#331111; letter-spacing:4px; margin-bottom:14px; }
-  .update-entry {
-    display:flex; gap:12px; margin-bottom:10px; align-items:flex-start;
-  }
+  .version-date { font-size:clamp(8px,2vw,10px); color:rgba(255,180,200,0.35); letter-spacing:4px; margin-bottom:14px; }
+  .update-entry { display:flex; gap:12px; margin-bottom:10px; align-items:flex-start; }
   .update-tag {
     font-size:clamp(7px,1.8vw,9px); letter-spacing:2px; padding:2px 8px;
     border-radius:2px; white-space:nowrap; flex-shrink:0; margin-top:1px;
     text-transform:uppercase;
   }
-  .tag-new{background:rgba(0,200,80,0.1);color:#00aa44;border:1px solid #004422;}
-  .tag-fix{background:rgba(80,120,255,0.1);color:#4488ff;border:1px solid #112266;}
-  .tag-change{background:rgba(255,160,0,0.1);color:#cc8800;border:1px solid #553300;}
-  .update-text { font-size:clamp(10px,2.5vw,13px); color:#664444; letter-spacing:2px; line-height:1.7; }
+  .tag-new{background:rgba(0,200,80,0.12);color:#00ee66;border:1px solid rgba(0,200,80,0.3);}
+  .tag-fix{background:rgba(80,140,255,0.12);color:#66aaff;border:1px solid rgba(80,140,255,0.3);}
+  .tag-change{background:rgba(255,160,0,0.12);color:#ffaa44;border:1px solid rgba(255,160,0,0.3);}
+  .update-text { font-size:clamp(10px,2.5vw,13px); color:rgba(255,220,235,0.55); letter-spacing:2px; line-height:1.7; }
 
   /* ══ DEATH ══ */
   #deathScreen { background:#000; }
@@ -340,6 +346,110 @@
   .lb-empty { color:#003344; font-size:clamp(10px,2.5vw,13px); letter-spacing:4px; text-align:center; padding:24px 0; }
   .lb-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
 
+  /* ══ SHOP BUTTON (home) ══ */
+  .btn-shop {
+    width:clamp(220px,55vw,320px); padding:13px 0;
+    background: linear-gradient(135deg,#cc00aa,#ff44dd);
+    color:#fff;
+    font-family:'Special Elite',monospace; font-size:clamp(13px,3.5vw,17px);
+    font-weight:700; letter-spacing:7px; text-transform:uppercase;
+    border:none; cursor:pointer; border-radius:4px;
+    box-shadow:0 4px 24px rgba(255,80,220,0.45);
+    transition:all .15s; position:relative; z-index:1;
+  }
+  .btn-shop:hover,.btn-shop:active{
+    background:linear-gradient(135deg,#ee22cc,#ff77ff);
+    transform:translateY(-2px) scale(1.03);
+    box-shadow:0 8px 32px rgba(255,120,255,0.6);
+  }
+
+  /* ══ SHOP SCREEN ══ */
+  #shopScreen {
+    background: linear-gradient(160deg,#0a0a2e 0%,#0d001a 40%,#1a000a 100%);
+    overflow:hidden;
+  }
+  #shopScreen::after {
+    content:''; position:absolute; inset:0; pointer-events:none; z-index:2;
+    background: repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.07) 3px,rgba(0,0,0,0.07) 4px);
+  }
+  .shop-blob {
+    position:absolute; border-radius:50%; pointer-events:none; filter:blur(90px); opacity:0.45;
+    animation:blobFloat 8s ease-in-out infinite;
+  }
+  .shop-blob-1 { width:400px;height:400px; background:#ff6600; bottom:-80px; left:-80px; animation-delay:-2s; }
+  .shop-blob-2 { width:320px;height:320px; background:#cc00ff; top:0; right:-60px; animation-delay:-5s; }
+  .shop-blob-3 { width:260px;height:260px; background:#ff0055; top:40%; right:20%; animation-delay:-3s; }
+  .shop-inner {
+    position:relative; z-index:3;
+    width:min(700px,96vw); max-height:90vh;
+    display:flex; flex-direction:column;
+  }
+  .shop-header {
+    display:flex; align-items:center; justify-content:space-between;
+    border-bottom:1px solid rgba(255,100,180,0.2); padding-bottom:12px; margin-bottom:16px; flex-shrink:0;
+  }
+  .shop-title {
+    font-family:'Creepster',monospace; font-size:clamp(26px,7vw,48px);
+    color:#fff; letter-spacing:8px;
+    text-shadow:0 0 20px #fff, 0 0 50px rgba(255,100,150,0.7);
+  }
+  .shop-coins {
+    font-size:clamp(13px,3vw,17px); letter-spacing:3px;
+    color:#ffdd88; background:rgba(255,160,0,0.12);
+    border:1px solid rgba(255,200,80,0.3); border-radius:20px;
+    padding:6px 16px;
+    text-shadow:0 0 10px rgba(255,200,0,0.5);
+  }
+  /* Category tabs */
+  .shop-tabs { display:flex; gap:8px; margin-bottom:18px; flex-shrink:0; flex-wrap:wrap; }
+  .shop-tab {
+    padding:7px 16px; background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,100,180,0.2); color:rgba(255,180,220,0.4);
+    font-family:'Special Elite',monospace; font-size:clamp(9px,2.2vw,12px);
+    letter-spacing:4px; text-transform:uppercase; cursor:pointer;
+    border-radius:3px; transition:all .15s;
+  }
+  .shop-tab:hover { color:#ff88cc; border-color:rgba(255,100,180,0.5); }
+  .shop-tab.active {
+    background:rgba(255,80,180,0.15); border-color:#ff44aa; color:#ff88cc;
+    box-shadow:0 0 12px rgba(255,80,180,0.3);
+  }
+  /* Item grid */
+  .shop-grid {
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(clamp(110px,28vw,140px),1fr));
+    gap:12px; overflow-y:auto; flex:1;
+    scrollbar-width:thin; scrollbar-color:rgba(255,80,120,0.3) transparent;
+    padding-right:4px;
+  }
+  .shop-grid::-webkit-scrollbar{width:4px;}
+  .shop-grid::-webkit-scrollbar-thumb{background:rgba(255,80,120,0.3);border-radius:2px;}
+  .shop-item {
+    background:rgba(255,255,255,0.03); border:2px solid rgba(255,80,180,0.15);
+    border-radius:6px; padding:12px 8px 10px;
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    cursor:pointer; transition:all .15s; position:relative;
+  }
+  .shop-item:hover { border-color:rgba(255,80,180,0.5); transform:translateY(-2px); background:rgba(255,80,180,0.07); }
+  .shop-item.owned { border-color:rgba(80,220,120,0.4); background:rgba(0,200,80,0.06); }
+  .shop-item.equipped { border-color:rgba(80,255,150,0.7); background:rgba(0,220,100,0.1); box-shadow:0 0 14px rgba(0,255,120,0.2); }
+  .shop-item.locked { opacity:0.5; }
+  .shop-preview { width:64px; height:64px; display:flex; align-items:center; justify-content:center; }
+  .shop-preview canvas { display:block; }
+  .shop-item-name { font-size:clamp(9px,2vw,11px); letter-spacing:3px; color:rgba(255,200,230,0.5); text-align:center; text-transform:uppercase; }
+  .shop-item-name.owned { color:rgba(100,255,160,0.8); }
+  .shop-item-name.equipped { color:#88ffbb; }
+  .shop-item-price { font-size:clamp(9px,2vw,11px); letter-spacing:2px; color:rgba(255,200,100,0.7); display:flex; align-items:center; gap:3px; }
+  .shop-item-price.free { color:rgba(80,230,130,0.8); }
+  .shop-item-badge {
+    position:absolute; top:5px; right:5px;
+    font-size:8px; letter-spacing:2px; padding:2px 5px;
+    border-radius:2px; text-transform:uppercase;
+  }
+  .badge-equipped { background:rgba(0,255,120,0.15); color:#88ffbb; border:1px solid rgba(0,200,100,0.4); }
+  .badge-free { background:rgba(80,255,150,0.1); color:#66ffaa; border:1px solid rgba(0,200,80,0.3); }
+  /* Confirm/action area */
+  .shop-action { margin-top:14px; display:flex; gap:10px; justify-content:center; flex-shrink:0; flex-wrap:wrap; }
+
   /* ══ MOBILE ══ */
   #joystick-zone{position:fixed;bottom:0;left:0;width:50%;height:220px;z-index:50;pointer-events:all;display:none;}
   #joystick-base{position:absolute;bottom:40px;left:40px;width:110px;height:110px;border-radius:50%;background:rgba(255,255,255,0.07);border:2px solid rgba(255,80,80,0.25);}
@@ -392,10 +502,36 @@
     <h2 class="home-title-sub"><span class="q1">'</span>Dr Rohan's Hospital<span class="q2">'</span></h2>
     <div class="home-btns">
       <button class="btn-play" id="playBtn">▶ &nbsp; Play</button>
+      <button class="btn-shop" id="shopBtn">🛍 &nbsp; Shop</button>
       <button class="btn-notes" id="notesBtn">📋 &nbsp; Update Notes</button>
     </div>
   </div>
   <div class="home-footer">WASD / ARROWS · SHIFT TO SPRINT &nbsp;|&nbsp; MOBILE: JOYSTICK</div>
+</div>
+
+<!-- ══ SHOP ══ -->
+<div id="shopScreen" class="screen">
+  <div class="shop-blob shop-blob-1"></div>
+  <div class="shop-blob shop-blob-2"></div>
+  <div class="shop-blob shop-blob-3"></div>
+  <button class="back-btn" id="shopBackBtn">← Back</button>
+  <div class="shop-inner">
+    <div class="shop-header">
+      <span class="shop-title">Shop</span>
+      <span class="shop-coins">🪙 <span id="shopCoinBalance">0</span></span>
+    </div>
+    <div class="shop-tabs">
+      <button class="shop-tab active" data-cat="hats">🎩 Hats</button>
+      <button class="shop-tab" data-cat="shirts">👕 Shirts</button>
+      <button class="shop-tab" data-cat="pants">👖 Pants</button>
+      <button class="shop-tab" data-cat="shoes">👟 Shoes</button>
+    </div>
+    <div class="shop-grid" id="shopGrid"></div>
+    <div class="shop-action">
+      <button class="btn btn-escape" id="shopEquipBtn" style="display:none;">Equip</button>
+      <button class="btn btn-red" id="shopBuyBtn" style="display:none;margin-top:0;">Buy</button>
+    </div>
+  </div>
 </div>
 
 <!-- ══ MODE SELECT ══ -->
@@ -475,18 +611,30 @@
 
 <!-- ══ UPDATE NOTES ══ -->
 <div id="notesScreen" class="screen">
-  <div class="notes-bg-glow"></div>
+  <div class="notes-blob notes-blob-1"></div>
+  <div class="notes-blob notes-blob-2"></div>
+  <div class="notes-blob notes-blob-3"></div>
   <button class="back-btn" id="notesBackBtn">← Back</button>
   <div class="notes-inner">
     <div class="notes-header">
       <span class="notes-title">Updates</span>
-      <span class="notes-version-badge">CURRENT: v1.19</span>
+      <span class="notes-version-badge">CURRENT: v1.2</span>
     </div>
     <div class="notes-scroll">
 
       <div class="version-block">
-        <div class="version-tag">v1.19</div>
+        <div class="version-tag">v1.2</div>
         <div class="version-date">LATEST</div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Shop — browse and equip cosmetics from the home screen</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">4 categories — Hats, Shirts, Pants and Shoes, each with 5 items</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Some items are free, others cost coins — spend what you earn in-game</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Coins collected in a run carry over to your shop balance when you escape</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Equipped cosmetics show on your character during gameplay</span></div>
+      </div>
+
+      <div class="version-block">
+        <div class="version-tag">v1.19</div>
+        <div class="version-date">—</div>
         <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Leaderboard — after escaping in Timed Mode, enter your name and submit your time</span></div>
         <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Top 20 times saved and ranked — 🥇🥈🥉 medals for the top three</span></div>
         <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Your entry highlights in the table so you can see exactly where you placed</span></div>
@@ -777,12 +925,24 @@ function drawExit(){
 function drawPlayer(px,py,facing){
   const x=px-camX,y=py-camY;ctx.save();ctx.translate(x,y);if(facing<0)ctx.scale(-1,1);
   ctx.fillStyle='rgba(0,0,0,.35)';drawEllipse(ctx,0,14,14,6);ctx.fill();
-  ctx.fillStyle='#3a7aff';ctx.fillRect(-8,-2,16,18);ctx.fillStyle='#f5c89a';ctx.beginPath();ctx.arc(0,-10,10,0,Math.PI*2);ctx.fill();
+  // Shirt
+  const shirtItem = SHOP_ITEMS.shirts.find(i=>i.id===shopEquipped.shirts);
+  if(shirtItem) shirtItem.draw(ctx,1); else { ctx.fillStyle='#3a7aff';ctx.fillRect(-8,-2,16,18); }
+  // Head
+  ctx.fillStyle='#f5c89a';ctx.beginPath();ctx.arc(0,-10,10,0,Math.PI*2);ctx.fill();
   ctx.fillStyle='#2a1a00';ctx.fillRect(-10,-18,20,8);ctx.beginPath();ctx.arc(0,-18,10,Math.PI,0);ctx.fill();
   ctx.fillStyle='#fff';ctx.fillRect(3,-13,5,4);ctx.fillStyle='#222';ctx.fillRect(5,-13,3,4);
+  // Hat
+  const hatItem = SHOP_ITEMS.hats.find(i=>i.id===shopEquipped.hats);
+  if(hatItem) hatItem.draw(ctx,1);
+  // Legs
   const lo=player.running?Math.sin(Date.now()*.02)*8:0;
-  ctx.fillStyle='#1a1a44';ctx.fillRect(-7,16,6,12+lo);ctx.fillRect(1,16,6,12-lo);
-  ctx.fillStyle='#111';ctx.fillRect(-8,27+lo,8,5);ctx.fillRect(0,27-lo,8,5);ctx.restore();
+  const pantsItem = SHOP_ITEMS.pants.find(i=>i.id===shopEquipped.pants);
+  if(pantsItem) pantsItem.draw(ctx,1,lo); else { ctx.fillStyle='#1a1a44';ctx.fillRect(-7,16,6,12+lo);ctx.fillRect(1,16,6,12-lo); }
+  // Shoes
+  const shoesItem = SHOP_ITEMS.shoes.find(i=>i.id===shopEquipped.shoes);
+  if(shoesItem) shoesItem.draw(ctx,1,lo); else { ctx.fillStyle='#111';ctx.fillRect(-8,27+lo,8,5);ctx.fillRect(0,27-lo,8,5); }
+  ctx.restore();
 }
 
 function drawGinger(gx,gy,facing,syringeAngle){
@@ -961,6 +1121,7 @@ function update(){
   if(Math.hypot(player.x-ex,player.y-ey)<PLAYER_R+TILE*0.55){
     gameState='escaped';
     elapsedTime=(Date.now()-timerStart)/1000;
+    shopEarnCoins(coinsCollected); // coins carry over to shop balance
     var tLabel=document.getElementById('escapeTimeLabel');
     if(timedMode){
       tLabel.textContent='⏱ YOUR TIME: '+elapsedTime.toFixed(2)+'s';tLabel.style.display='block';
@@ -993,8 +1154,9 @@ function draw(){
 
 function loop(){update();draw();animFrame=requestAnimationFrame(loop);}
 
-function startGame(hc,timed){
+async function startGame(hc,timed){
   hardcoreMode=hc; timedMode=timed||false;
+  await shopLoadState();
   initGame();gameState='playing';
   showScreen(null);
   document.getElementById('hcBadge').style.display=hc?'block':'none';
@@ -1009,19 +1171,35 @@ function goHome(){
   document.getElementById('timerHUD').style.display='none';
   showScreen('homeScreen');
 }
-// ── LEADERBOARD ──
+// ══ STORAGE SHIM — falls back to localStorage when window.storage unavailable ══
+const storage = {
+  async get(key, shared){
+    if(window.storage && window.storage !== storage){
+      try{ return await window.storage.get(key, shared); }catch(e){}
+    }
+    try{ const v=localStorage.getItem(key); return v!=null?{value:v}:null; }catch(e){ return null; }
+  },
+  async set(key, value, shared){
+    if(window.storage && window.storage !== storage){
+      try{ return await window.storage.set(key, value, shared); }catch(e){}
+    }
+    try{ localStorage.setItem(key, value); return {value}; }catch(e){ return null; }
+  }
+};
+
+// ══ LEADERBOARD ══
 const LB_KEY = 'lb_timed_scores';
 let pendingScore = null; // {time, newEntry: index} set when showing leaderboard after a run
 
 async function lbLoad(){
   try{
-    const r = await window.storage.get(LB_KEY, true);
+    const r = await storage.get(LB_KEY, true);
     return r ? JSON.parse(r.value) : [];
   }catch(e){ return []; }
 }
 
 async function lbSave(scores){
-  try{ await window.storage.set(LB_KEY, JSON.stringify(scores), true); }catch(e){}
+  try{ await storage.set(LB_KEY, JSON.stringify(scores), true); }catch(e){}
 }
 
 async function lbRender(highlightIdx){
@@ -1072,6 +1250,202 @@ document.getElementById('lbSubmitBtn').addEventListener('click', lbSubmit);
 document.getElementById('lbNameInput').addEventListener('keydown', e=>{ if(e.key==='Enter') lbSubmit(); });
 document.getElementById('lbPlayAgainBtn').addEventListener('click',()=>startGame(hardcoreMode,timedMode));
 document.getElementById('lbHomeBtn').addEventListener('click', goHome);
+
+
+// ══ SHOP SYSTEM ══
+const SHOP_OWNED_KEY = 'shop_owned';
+const SHOP_EQUIPPED_KEY = 'shop_equipped';
+const SHOP_COINS_KEY = 'shop_coins';
+
+// Item definitions — each has id, name, price (0=free), and draw function
+const SHOP_ITEMS = {
+  hats: [
+    { id:'hat_none',   name:'None',        price:0,   draw:(c,s)=>{ /* no hat */ } },
+    { id:'hat_red',    name:'Red Cap',     price:0,   draw:(c,s)=>{ c.fillStyle='#cc2200';c.fillRect(-s*9,-s*22,s*18,s*8);c.fillRect(-s*11,-s*18,s*24,s*5);c.fillStyle='#aa1800';c.fillRect(-s*11,-s*13,s*4,s*3); } },
+    { id:'hat_beanie', name:'Blue Beanie', price:5,   draw:(c,s)=>{ c.fillStyle='#1144cc';c.beginPath();c.arc(0,-s*20,s*11,Math.PI,0);c.fill();c.fillRect(-s*11,-s*21,s*22,s*6);c.fillStyle='#3366ff';c.fillRect(-s*11,-s*21,s*22,s*3); } },
+    { id:'hat_top',    name:'Top Hat',     price:10,  draw:(c,s)=>{ c.fillStyle='#111';c.fillRect(-s*7,-s*30,s*14,s*14);c.fillRect(-s*11,-s*17,s*22,s*4);c.fillStyle='#333';c.fillRect(-s*6,-s*29,s*12,s*2); } },
+    { id:'hat_cowboy', name:'Cowboy Hat',  price:15,  draw:(c,s)=>{ c.fillStyle='#8B5E3C';c.beginPath();c.moveTo(-s*14,-s*18);c.lineTo(-s*8,-s*28);c.lineTo(s*8,-s*28);c.lineTo(s*14,-s*18);c.closePath();c.fill();c.fillRect(-s*13,-s*20,s*26,s*4);c.fillStyle='#6B4423';c.fillRect(-s*7,-s*28,s*14,s*2); } },
+  ],
+  shirts: [
+    { id:'shirt_blue',   name:'Blue',       price:0,   draw:(c,s)=>{ c.fillStyle='#3a7aff';c.fillRect(-s*8,-s*2,s*16,s*18); } },
+    { id:'shirt_red',    name:'Red',        price:0,   draw:(c,s)=>{ c.fillStyle='#cc2200';c.fillRect(-s*8,-s*2,s*16,s*18); } },
+    { id:'shirt_green',  name:'Green',      price:5,   draw:(c,s)=>{ c.fillStyle='#228833';c.fillRect(-s*8,-s*2,s*16,s*18); } },
+    { id:'shirt_stripe', name:'Striped',    price:8,   draw:(c,s)=>{ c.fillStyle='#eeeeee';c.fillRect(-s*8,-s*2,s*16,s*18);c.fillStyle='#2255cc';[0,4,8,12].forEach(i=>{c.fillRect(-s*8,-s*2+s*i,s*16,s*2);}); } },
+    { id:'shirt_black',  name:'Black Tee',  price:12,  draw:(c,s)=>{ c.fillStyle='#111';c.fillRect(-s*8,-s*2,s*16,s*18);c.fillStyle='#333';c.fillRect(-s*5,s*2,s*10,s*5); } },
+  ],
+  pants: [
+    { id:'pants_navy',   name:'Navy',       price:0,   draw:(c,s,lo)=>{ c.fillStyle='#1a1a44';c.fillRect(-s*7,s*16,s*6,s*12+(lo||0));c.fillRect(s*1,s*16,s*6,s*12-(lo||0)); } },
+    { id:'pants_brown',  name:'Brown',      price:0,   draw:(c,s,lo)=>{ c.fillStyle='#5a3010';c.fillRect(-s*7,s*16,s*6,s*12+(lo||0));c.fillRect(s*1,s*16,s*6,s*12-(lo||0)); } },
+    { id:'pants_grey',   name:'Grey',       price:5,   draw:(c,s,lo)=>{ c.fillStyle='#555';c.fillRect(-s*7,s*16,s*6,s*12+(lo||0));c.fillRect(s*1,s*16,s*6,s*12-(lo||0)); } },
+    { id:'pants_camo',   name:'Camo',       price:10,  draw:(c,s,lo)=>{ c.fillStyle='#4a5a2a';c.fillRect(-s*7,s*16,s*6,s*12+(lo||0));c.fillRect(s*1,s*16,s*6,s*12-(lo||0));c.fillStyle='#3a4a1a';[[-5,18,3,3],[0,20,3,4],[-4,24,4,3],[1,26,3,3]].forEach(r=>c.fillRect(s*r[0],s*r[1],s*r[2],s*r[3])); } },
+    { id:'pants_white',  name:'White',      price:8,   draw:(c,s,lo)=>{ c.fillStyle='#dddddd';c.fillRect(-s*7,s*16,s*6,s*12+(lo||0));c.fillRect(s*1,s*16,s*6,s*12-(lo||0));c.fillStyle='#bbbbbb';c.fillRect(-s*3,s*17,s*1,s*10); } },
+  ],
+  shoes: [
+    { id:'shoes_black',  name:'Black',      price:0,   draw:(c,s,lo)=>{ c.fillStyle='#111';c.fillRect(-s*8,s*27+(lo||0),s*8,s*5);c.fillRect(s*0,s*27-(lo||0),s*8,s*5); } },
+    { id:'shoes_white',  name:'White',      price:0,   draw:(c,s,lo)=>{ c.fillStyle='#eee';c.fillRect(-s*8,s*27+(lo||0),s*8,s*5);c.fillRect(s*0,s*27-(lo||0),s*8,s*5);c.fillStyle='#aaa';c.fillRect(-s*8,s*27+(lo||0),s*8,s*1);c.fillRect(s*0,s*27-(lo||0),s*8,s*1); } },
+    { id:'shoes_red',    name:'Red',        price:6,   draw:(c,s,lo)=>{ c.fillStyle='#cc2200';c.fillRect(-s*8,s*27+(lo||0),s*8,s*5);c.fillRect(s*0,s*27-(lo||0),s*8,s*5); } },
+    { id:'shoes_gold',   name:'Gold',       price:15,  draw:(c,s,lo)=>{ c.fillStyle='#cc9900';c.fillRect(-s*8,s*27+(lo||0),s*8,s*5);c.fillRect(s*0,s*27-(lo||0),s*8,s*5);c.fillStyle='#ffcc44';c.fillRect(-s*7,s*27+(lo||0),s*6,s*2);c.fillRect(s*1,s*27-(lo||0),s*6,s*2); } },
+    { id:'shoes_boot',   name:'Boots',      price:10,  draw:(c,s,lo)=>{ c.fillStyle='#3a2010';c.fillRect(-s*8,s*23+(lo||0),s*8,s*9);c.fillRect(s*0,s*23-(lo||0),s*8,s*9);c.fillStyle='#2a1408';c.fillRect(-s*8,s*27+(lo||0),s*8,s*2);c.fillRect(s*0,s*27-(lo||0),s*8,s*2); } },
+  ],
+};
+
+// Default equipped
+let shopEquipped = { hats:'hat_none', shirts:'shirt_blue', pants:'pants_navy', shoes:'shoes_black' };
+let shopOwned = { hats:['hat_none','hat_red'], shirts:['shirt_blue','shirt_red'], pants:['pants_navy','pants_brown'], shoes:['shoes_black','shoes_white'] };
+let shopCoinBalance = 0;
+let shopSelectedCat = 'hats';
+let shopSelectedItem = null;
+
+async function shopLoadState(){
+  try {
+    const ownedR = await storage.get(SHOP_OWNED_KEY);
+    if(ownedR) shopOwned = JSON.parse(ownedR.value);
+    const equippedR = await storage.get(SHOP_EQUIPPED_KEY);
+    if(equippedR) shopEquipped = JSON.parse(equippedR.value);
+    const coinsR = await storage.get(SHOP_COINS_KEY);
+    if(coinsR) shopCoinBalance = parseInt(coinsR.value)||0;
+  } catch(e){}
+}
+
+async function shopSaveState(){
+  try {
+    await storage.set(SHOP_OWNED_KEY, JSON.stringify(shopOwned));
+    await storage.set(SHOP_EQUIPPED_KEY, JSON.stringify(shopEquipped));
+    await storage.set(SHOP_COINS_KEY, String(shopCoinBalance));
+  } catch(e){}
+}
+
+function shopEarnCoins(n){
+  shopCoinBalance += n;
+  shopSaveState();
+}
+
+function shopDrawPreview(canvas, item, cat){
+  const c = canvas.getContext('2d');
+  c.clearRect(0,0,64,64);
+  const cx=32, cy=42, s=1;
+  // mini character base
+  c.fillStyle='#f5c89a'; c.beginPath(); c.arc(cx,cy-18,10,0,Math.PI*2); c.fill();
+  c.fillStyle='#2a1a00'; c.fillRect(cx-10,cy-26,20,8); c.beginPath(); c.arc(cx,cy-26,10,Math.PI,0); c.fill();
+  // draw item on top
+  c.save(); c.translate(cx,cy);
+  if(cat==='shirts') item.draw(c,s);
+  else if(cat==='pants') item.draw(c,s,0);
+  else if(cat==='shoes') item.draw(c,s,0);
+  else if(cat==='hats') item.draw(c,s);
+  c.restore();
+}
+
+function shopRender(){
+  const grid = document.getElementById('shopGrid');
+  const items = SHOP_ITEMS[shopSelectedCat];
+  grid.innerHTML = '';
+  shopSelectedItem = null;
+  document.getElementById('shopEquipBtn').style.display='none';
+  document.getElementById('shopBuyBtn').style.display='none';
+
+  items.forEach(item => {
+    const owned = shopOwned[shopSelectedCat].includes(item.id);
+    const equipped = shopEquipped[shopSelectedCat] === item.id;
+
+    const div = document.createElement('div');
+    div.className = 'shop-item' + (equipped?' equipped':owned?' owned':'');
+
+    // Canvas preview
+    const previewDiv = document.createElement('div');
+    previewDiv.className = 'shop-preview';
+    const cvs = document.createElement('canvas');
+    cvs.width=64; cvs.height=64;
+    shopDrawPreview(cvs, item, shopSelectedCat);
+    previewDiv.appendChild(cvs);
+    div.appendChild(previewDiv);
+
+    // Name
+    const nameEl = document.createElement('div');
+    nameEl.className = 'shop-item-name' + (equipped?' equipped':owned?' owned':'');
+    nameEl.textContent = item.name;
+    div.appendChild(nameEl);
+
+    // Price or status
+    const priceEl = document.createElement('div');
+    priceEl.className = 'shop-item-price' + (item.price===0?' free':'');
+    priceEl.textContent = owned ? (equipped ? '✓ Equipped' : '✓ Owned') : (item.price===0 ? 'Free' : '🪙 '+item.price);
+    div.appendChild(priceEl);
+
+    // Badge
+    if(equipped){ const b=document.createElement('div');b.className='shop-item-badge badge-equipped';b.textContent='ON';div.appendChild(b); }
+    else if(item.price===0&&!owned){ const b=document.createElement('div');b.className='shop-item-badge badge-free';b.textContent='FREE';div.appendChild(b); }
+
+    div.addEventListener('click',()=>shopSelectItem(item.id));
+    grid.appendChild(div);
+  });
+
+  document.getElementById('shopCoinBalance').textContent = shopCoinBalance;
+}
+
+function shopSelectItem(id){
+  shopSelectedItem = id;
+  const cat = shopSelectedCat;
+  const item = SHOP_ITEMS[cat].find(i=>i.id===id);
+  const owned = shopOwned[cat].includes(id);
+  const equipped = shopEquipped[cat]===id;
+
+  const equipBtn = document.getElementById('shopEquipBtn');
+  const buyBtn = document.getElementById('shopBuyBtn');
+
+  if(equipped){ equipBtn.style.display='none'; buyBtn.style.display='none'; }
+  else if(owned){ equipBtn.style.display='inline-block'; buyBtn.style.display='none'; }
+  else {
+    equipBtn.style.display='none';
+    buyBtn.style.display='inline-block';
+    buyBtn.textContent = item.price===0 ? 'Get Free' : ('Buy — 🪙 '+item.price);
+    buyBtn.disabled = (item.price>0 && shopCoinBalance<item.price);
+    buyBtn.style.opacity = buyBtn.disabled ? '0.4' : '1';
+  }
+  // Highlight selected
+  document.querySelectorAll('.shop-item').forEach((el,i)=>{
+    el.style.outline = SHOP_ITEMS[cat][i].id===id ? '2px solid #ffaa00' : 'none';
+  });
+}
+
+async function shopBuy(){
+  const cat = shopSelectedCat;
+  const item = SHOP_ITEMS[cat].find(i=>i.id===shopSelectedItem);
+  if(!item) return;
+  if(item.price>0 && shopCoinBalance<item.price) return;
+  shopCoinBalance -= item.price;
+  shopOwned[cat] = [...shopOwned[cat], item.id];
+  shopEquipped[cat] = item.id;
+  await shopSaveState();
+  shopRender();
+}
+
+async function shopEquip(){
+  const cat = shopSelectedCat;
+  shopEquipped[cat] = shopSelectedItem;
+  await shopSaveState();
+  shopRender();
+}
+
+async function shopOpen(){
+  await shopLoadState();
+  shopSelectedCat = 'hats';
+  document.querySelectorAll('.shop-tab').forEach(t=>t.classList.toggle('active', t.dataset.cat==='hats'));
+  shopRender();
+  showScreen('shopScreen');
+}
+
+document.getElementById('shopBtn').addEventListener('click', shopOpen);
+document.getElementById('shopBackBtn').addEventListener('click',()=>showScreen('homeScreen'));
+document.getElementById('shopEquipBtn').addEventListener('click', shopEquip);
+document.getElementById('shopBuyBtn').addEventListener('click', shopBuy);
+document.querySelectorAll('.shop-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    shopSelectedCat = tab.dataset.cat;
+    document.querySelectorAll('.shop-tab').forEach(t=>t.classList.toggle('active',t===tab));
+    shopRender();
+  });
+});
 
 
 document.getElementById('playBtn').addEventListener('click',()=>showScreen('modeScreen'));
