@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Escape Dr Rohan's Hospital</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Special+Elite&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#000; overflow:hidden; font-family:'Special Elite','Courier New',monospace; touch-action:none; }
+  canvas { display:block; }
+  @keyframes pulseGlow{0%,100%{opacity:.6;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.15)}}
+
+  .screen {
+    position:fixed; inset:0;
+    display:none; flex-direction:column; align-items:center; justify-content:center;
+    z-index:200;
+  }
+  .screen.active { display:flex; }
+
+  /* ══ HOME ══ */
+  #homeScreen {
+    background: linear-gradient(160deg, #0a0a2e 0%, #0d001a 40%, #1a000a 100%);
+    overflow: hidden;
+  }
+  /* Animated colourful background blobs */
+  .home-blob {
+    position:absolute; border-radius:50%; pointer-events:none; filter:blur(80px); opacity:0.55;
+    animation: blobFloat 8s ease-in-out infinite;
+  }
+  .home-blob-1 { width:420px;height:420px; background:#ff0055; top:-80px; left:-100px; animation-delay:0s; }
+  .home-blob-2 { width:360px;height:360px; background:#7700ff; top:10%; right:-80px; animation-delay:-3s; }
+  .home-blob-3 { width:300px;height:300px; background:#00ccff; bottom:5%; left:10%; animation-delay:-5s; }
+  .home-blob-4 { width:280px;height:280px; background:#ff6600; bottom:10%; right:5%; animation-delay:-2s; }
+  @keyframes blobFloat {
+    0%,100%{transform:translate(0,0) scale(1);}
+    33%{transform:translate(20px,-30px) scale(1.05);}
+    66%{transform:translate(-15px,20px) scale(0.97);}
+  }
+  /* Scanline overlay for that slightly gritty feel */
+  #homeScreen::after {
+    content:''; position:absolute; inset:0; pointer-events:none; z-index:2;
+    background: repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.08) 3px,rgba(0,0,0,0.08) 4px);
+  }
+
+  .home-content {
+    position:relative; z-index:3;
+    display:flex; flex-direction:column; align-items:center;
+    width:100%;
+  }
+
+  /* Character canvas on home screen */
+  #homeCharCanvas {
+    display:block;
+    width: clamp(120px, 28vw, 200px);
+    height: clamp(120px, 28vw, 200px);
+    image-rendering: pixelated;
+    filter: drop-shadow(0 8px 32px rgba(255,80,120,0.55)) drop-shadow(0 0 16px rgba(100,180,255,0.3));
+    animation: charBob 2.4s ease-in-out infinite;
+    margin-bottom: 0;
+  }
+  @keyframes charBob {
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-12px);}
+  }
+
+  /* Title */
+  .home-eyebrow {
+    font-size: clamp(9px,2.2vw,13px); letter-spacing:8px; color:#ff88aa;
+    text-transform:uppercase; margin-bottom:6px;
+    text-shadow: 0 0 12px rgba(255,80,120,0.6);
+  }
+  .home-title-escape {
+    font-family:'Creepster',monospace;
+    font-size: clamp(36px,9vw,80px);
+    color:#ffffff;
+    letter-spacing: 6px;
+    line-height:1;
+    text-shadow: 0 0 20px #fff, 0 0 50px rgba(255,100,150,0.7), 0 4px 0 rgba(0,0,0,0.5);
+    animation: titlePop 6s ease-in-out infinite;
+  }
+  .home-title-sub {
+    font-family:'Special Elite',monospace;
+    font-size: clamp(12px,3.5vw,26px);
+    color:#ffddee;
+    letter-spacing: 3px;
+    margin-top: 4px;
+    margin-bottom: 36px;
+    text-shadow: 0 0 16px rgba(255,100,180,0.5);
+    text-align:center;
+    padding: 0 16px;
+  }
+  /* Coloured quote marks */
+  .home-title-sub .q1 { color:#ff4488; font-size:1.3em; line-height:0; vertical-align:-0.1em; }
+  .home-title-sub .q2 { color:#44aaff; font-size:1.3em; line-height:0; vertical-align:-0.1em; }
+
+  @keyframes titlePop {
+    0%,100%{text-shadow:0 0 20px #fff,0 0 50px rgba(255,100,150,0.7),0 4px 0 rgba(0,0,0,0.5);}
+    50%{text-shadow:0 0 30px #fff,0 0 80px rgba(255,60,120,0.9),0 0 120px rgba(100,200,255,0.3),0 4px 0 rgba(0,0,0,0.5);}
+  }
+
+  /* Buttons */
+  .home-btns { display:flex; flex-direction:column; align-items:center; gap:14px; width:100%; }
+  .btn-play {
+    width:clamp(220px,55vw,320px); padding:17px 0;
+    background: linear-gradient(135deg,#ff2255,#ff6600);
+    color:#fff;
+    font-family:'Special Elite',monospace; font-size:clamp(14px,4vw,19px);
+    font-weight:700; letter-spacing:7px; text-transform:uppercase;
+    border:none; cursor:pointer;
+    box-shadow: 0 4px 30px rgba(255,50,100,0.6), 0 2px 0 rgba(255,255,255,0.15) inset;
+    transition:all .15s; position:relative; z-index:1; border-radius:4px;
+  }
+  .btn-play:hover,.btn-play:active{
+    background:linear-gradient(135deg,#ff4477,#ff8822);
+    transform:translateY(-2px) scale(1.03);
+    box-shadow:0 8px 40px rgba(255,80,120,0.75);
+  }
+  .btn-notes {
+    width:clamp(220px,55vw,320px); padding:13px 0;
+    background: rgba(255,255,255,0.06);
+    color:#aabbdd;
+    font-family:'Special Elite',monospace; font-size:clamp(11px,3vw,14px);
+    font-weight:700; letter-spacing:6px; text-transform:uppercase;
+    border:1px solid rgba(150,200,255,0.2); cursor:pointer; border-radius:4px;
+    transition:all .15s; position:relative; z-index:1;
+  }
+  .btn-notes:hover,.btn-notes:active{
+    color:#ffffff; border-color:rgba(150,200,255,0.5);
+    background:rgba(255,255,255,0.10);
+    transform:translateY(-1px);
+  }
+  .home-footer { position:absolute; bottom:22px; color:rgba(255,255,255,0.2); font-size:clamp(9px,2vw,11px); letter-spacing:4px; text-align:center; z-index:3; }
+
+  /* ══ MODE SELECT ══ */
+  #modeScreen { background:#060008; }
+  #modeScreen::before {
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background:
+      repeating-linear-gradient(0deg,transparent,transparent 47px,rgba(255,0,0,0.03) 47px,rgba(255,0,0,0.03) 48px),
+      repeating-linear-gradient(90deg,transparent,transparent 47px,rgba(255,0,0,0.03) 47px,rgba(255,0,0,0.03) 48px);
+  }
+  .mode-bg-glow {
+    position:absolute; width:600px; height:600px; border-radius:50%;
+    background:radial-gradient(circle,rgba(180,0,0,0.15) 0%,transparent 70%);
+    top:50%; left:50%; transform:translate(-50%,-50%);
+    animation:pulseGlow 3s ease-in-out infinite; pointer-events:none;
+  }
+  .back-btn {
+    position:absolute; top:24px; left:24px; background:transparent; border:none; cursor:pointer;
+    color:#441111; font-family:'Special Elite',monospace; font-size:clamp(11px,3vw,14px);
+    letter-spacing:4px; transition:color .15s; z-index:5;
+  }
+  .back-btn:hover{color:#aa2222;}
+  .mode-heading {
+    font-family:'Creepster',monospace; font-size:clamp(14px,5vw,32px);
+    color:#881111; letter-spacing:12px; text-transform:uppercase;
+    margin-bottom:6px; position:relative; z-index:1;
+  }
+  .mode-sub { color:#440808; font-size:clamp(9px,2vw,12px); letter-spacing:5px; margin-bottom:50px; position:relative; z-index:1; }
+  .mode-cards { display:flex; gap:clamp(14px,4vw,30px); flex-wrap:wrap; justify-content:center; align-items:stretch; position:relative; z-index:1; padding:0 16px; }
+  .mode-card {
+    width:clamp(150px,38vw,230px); padding:clamp(20px,4vw,34px) clamp(16px,3vw,28px);
+    border:none; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:12px;
+    transition:transform .15s,box-shadow .15s; position:relative; overflow:hidden;
+  }
+  .mode-card::before { content:''; position:absolute; inset:0; background:rgba(255,255,255,0.04); opacity:0; transition:opacity .15s; }
+  .mode-card:hover::before,.mode-card:active::before{opacity:1;}
+  .mode-card:hover,.mode-card:active{transform:translateY(-4px) scale(1.03);}
+  #normalCard { background:#0d0005; border:2px solid #441111; box-shadow:0 0 20px rgba(180,0,0,0.15); }
+  #normalCard:hover{box-shadow:0 0 40px rgba(255,0,0,0.3);border-color:#882222;}
+  #hardcoreCard { background:#0d0400; border:2px solid #663300; box-shadow:0 0 20px rgba(255,80,0,0.15); }
+  #hardcoreCard:hover{box-shadow:0 0 40px rgba(255,100,0,0.35);border-color:#aa4400;}
+  #timedCard { background:#00050d; border:2px solid #004466; box-shadow:0 0 20px rgba(0,180,255,0.15); }
+  #timedCard:hover{box-shadow:0 0 40px rgba(0,200,255,0.35);border-color:#0088cc;}
+  #timedCard .card-name{color:#00ccff;}
+  #timedCard .card-desc{color:#224455;}
+  #timedCard .card-tag{background:rgba(0,180,255,0.1);color:#0088bb;border:1px solid #003344;animation:timedTagPulse 2s ease-in-out infinite;}
+  @keyframes timedTagPulse{0%,100%{box-shadow:none}50%{box-shadow:0 0 10px rgba(0,180,255,0.35)}}
+  .card-icon { font-size:clamp(32px,8vw,52px); line-height:1; }
+  .card-name { font-family:'Creepster',monospace; font-size:clamp(18px,5vw,28px); letter-spacing:4px; }
+  #normalCard .card-name{color:#ff2222;} #hardcoreCard .card-name{color:#ff6600;}
+  .card-desc { font-size:clamp(8px,2vw,11px); letter-spacing:3px; line-height:1.7; text-align:center; }
+  #normalCard .card-desc{color:#663333;} #hardcoreCard .card-desc{color:#664422;}
+  .card-tag { font-size:clamp(7px,1.8vw,9px); letter-spacing:4px; padding:4px 12px; border-radius:2px; text-transform:uppercase; }
+  #normalCard .card-tag{background:rgba(255,0,0,0.12);color:#882222;border:1px solid #441111;}
+  #hardcoreCard .card-tag{background:rgba(255,100,0,0.12);color:#884400;border:1px solid #663300;animation:hcTagPulse 2s ease-in-out infinite;}
+  @keyframes hcTagPulse{0%,100%{box-shadow:none}50%{box-shadow:0 0 10px rgba(255,100,0,0.3)}}
+
+  /* ══ UPDATE NOTES ══ */
+  #notesScreen { background:#060008; overflow:hidden; }
+  #notesScreen::before {
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background:
+      repeating-linear-gradient(0deg,transparent,transparent 47px,rgba(255,0,0,0.03) 47px,rgba(255,0,0,0.03) 48px),
+      repeating-linear-gradient(90deg,transparent,transparent 47px,rgba(255,0,0,0.03) 47px,rgba(255,0,0,0.03) 48px);
+  }
+  .notes-bg-glow {
+    position:absolute; width:500px; height:500px; border-radius:50%;
+    background:radial-gradient(circle,rgba(120,0,0,0.12) 0%,transparent 70%);
+    top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:none;
+    animation:pulseGlow 4s ease-in-out infinite;
+  }
+  .notes-inner {
+    position:relative; z-index:1;
+    width:min(680px,92vw); max-height:82vh;
+    display:flex; flex-direction:column;
+  }
+  .notes-header {
+    display:flex; align-items:baseline; gap:18px;
+    border-bottom:1px solid #2a0808; padding-bottom:16px; margin-bottom:24px; flex-shrink:0;
+  }
+  .notes-title {
+    font-family:'Creepster',monospace; font-size:clamp(26px,7vw,48px);
+    color:#cc1111; letter-spacing:8px;
+    text-shadow:0 0 20px #880000;
+  }
+  .notes-version-badge {
+    font-size:clamp(9px,2vw,12px); letter-spacing:4px; color:#441111;
+    border:1px solid #2a0808; padding:3px 10px; white-space:nowrap;
+  }
+  .notes-scroll {
+    overflow-y:auto; flex:1;
+    scrollbar-width:thin; scrollbar-color:#331111 transparent;
+    padding-right:8px;
+  }
+  .notes-scroll::-webkit-scrollbar{width:4px;}
+  .notes-scroll::-webkit-scrollbar-track{background:transparent;}
+  .notes-scroll::-webkit-scrollbar-thumb{background:#331111;border-radius:2px;}
+  .version-block { margin-bottom:32px; }
+  .version-block:last-child{margin-bottom:0;}
+  .version-tag {
+    font-family:'Creepster',monospace; font-size:clamp(14px,4vw,22px);
+    color:#ff2222; letter-spacing:6px; margin-bottom:4px;
+    display:flex; align-items:center; gap:12px;
+  }
+  .version-tag::after {
+    content:''; flex:1; height:1px; background:linear-gradient(to right,#330808,transparent);
+  }
+  .version-date { font-size:clamp(8px,2vw,10px); color:#331111; letter-spacing:4px; margin-bottom:14px; }
+  .update-entry {
+    display:flex; gap:12px; margin-bottom:10px; align-items:flex-start;
+  }
+  .update-tag {
+    font-size:clamp(7px,1.8vw,9px); letter-spacing:2px; padding:2px 8px;
+    border-radius:2px; white-space:nowrap; flex-shrink:0; margin-top:1px;
+    text-transform:uppercase;
+  }
+  .tag-new{background:rgba(0,200,80,0.1);color:#00aa44;border:1px solid #004422;}
+  .tag-fix{background:rgba(80,120,255,0.1);color:#4488ff;border:1px solid #112266;}
+  .tag-change{background:rgba(255,160,0,0.1);color:#cc8800;border:1px solid #553300;}
+  .update-text { font-size:clamp(10px,2.5vw,13px); color:#664444; letter-spacing:2px; line-height:1.7; }
+
+  /* ══ DEATH ══ */
+  #deathScreen { background:#000; }
+  #deathScreen h1 {
+    font-family:'Creepster',monospace; font-size:clamp(60px,16vw,150px);
+    color:#ff1a1a; letter-spacing:10px; text-shadow:0 0 60px #ff0000; animation:flicker 1.5s infinite;
+  }
+  .death-sub{color:#661111;font-size:clamp(10px,3vw,14px);letter-spacing:6px;margin-top:10px;}
+  .death-mode-label{color:#884400;font-size:clamp(9px,2.5vw,12px);letter-spacing:4px;margin-top:6px;display:none;}
+  .btn{padding:14px 40px;border:none;cursor:pointer;font-family:'Special Elite','Courier New',monospace;font-size:clamp(12px,3.5vw,17px);font-weight:700;letter-spacing:5px;text-transform:uppercase;transition:all .15s;}
+  .btn-red{background:#ff1a1a;color:#000;box-shadow:0 0 30px #ff000088;margin-top:24px;}
+  .btn-red:hover,.btn-red:active{background:#fff;transform:scale(1.04);}
+  .btn-ghost{background:transparent;color:#661111;border:1px solid #441111;margin-top:10px;}
+  .btn-ghost:hover,.btn-ghost:active{color:#fff;border-color:#ff1a1a;}
+
+  @keyframes flicker{0%,100%{opacity:1}91%{opacity:1}92%{opacity:.2}94%{opacity:1}97%{opacity:.5}98%{opacity:1}}
+  @keyframes escapePulse{0%,100%{text-shadow:0 0 60px #00ff66,0 0 120px rgba(0,255,100,0.4);}50%{text-shadow:0 0 100px #00ff88,0 0 200px rgba(0,255,120,0.6),0 0 300px rgba(0,200,100,0.2);}}
+  #escapeScreen { background:#000; }
+  .btn-escape{background:#00cc66;color:#000;box-shadow:0 0 30px rgba(0,255,100,0.5);margin-top:24px;padding:14px 40px;border:none;cursor:pointer;font-family:'Special Elite','Courier New',monospace;font-size:clamp(12px,3.5vw,17px);font-weight:700;letter-spacing:5px;text-transform:uppercase;transition:all .15s;}
+  .btn-escape:hover,.btn-escape:active{background:#00ff88;transform:scale(1.04);}
+
+  /* ══ LEADERBOARD ══ */
+  #leaderboardScreen { background:#000508; }
+  .lb-bg-glow {
+    position:absolute; width:600px; height:600px; border-radius:50%;
+    background:radial-gradient(circle,rgba(0,180,255,0.08) 0%,transparent 70%);
+    top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:none;
+    animation:pulseGlow 4s ease-in-out infinite;
+  }
+  .lb-inner {
+    position:relative; z-index:1;
+    width:min(560px,92vw); max-height:88vh;
+    display:flex; flex-direction:column; gap:18px;
+  }
+  .lb-header {
+    display:flex; align-items:baseline; gap:16px;
+    border-bottom:1px solid #002233; padding-bottom:14px;
+  }
+  .lb-title {
+    font-family:'Creepster',monospace; font-size:clamp(28px,7vw,52px);
+    color:#00ccff; letter-spacing:8px;
+    text-shadow:0 0 20px rgba(0,200,255,0.5);
+  }
+  .lb-badge {
+    font-size:clamp(9px,2vw,11px); letter-spacing:4px; color:#004466;
+    border:1px solid #002233; padding:3px 10px; white-space:nowrap;
+  }
+  .lb-your-time {
+    font-size:clamp(12px,3vw,16px); letter-spacing:4px;
+    color:#00bbdd; text-align:center; margin-bottom:4px;
+  }
+  .lb-your-time span { color:#00ffee; font-size:1.15em; }
+  .lb-input-row {
+    display:flex; gap:10px; justify-content:center; align-items:center;
+  }
+  .lb-input {
+    background:#001a22; border:1px solid #004466; color:#00ddff;
+    font-family:'Special Elite',monospace; font-size:clamp(13px,3.5vw,16px);
+    letter-spacing:3px; padding:10px 14px; width:clamp(160px,45vw,240px);
+    outline:none; border-radius:3px;
+  }
+  .lb-input:focus { border-color:#00aacc; box-shadow:0 0 10px rgba(0,180,255,0.3); }
+  .lb-submit-btn {
+    background:#00aacc; color:#000; border:none; cursor:pointer;
+    font-family:'Special Elite',monospace; font-size:clamp(11px,3vw,14px);
+    font-weight:700; letter-spacing:4px; padding:10px 18px; border-radius:3px;
+    transition:all .15s; white-space:nowrap;
+  }
+  .lb-submit-btn:hover { background:#00ddff; transform:scale(1.04); }
+  .lb-scroll {
+    overflow-y:auto; flex:1; max-height:36vh;
+    scrollbar-width:thin; scrollbar-color:#002233 transparent;
+  }
+  .lb-scroll::-webkit-scrollbar{width:4px;}
+  .lb-scroll::-webkit-scrollbar-thumb{background:#002233;border-radius:2px;}
+  .lb-row {
+    display:flex; align-items:center; gap:12px;
+    padding:9px 4px; border-bottom:1px solid #001a22;
+  }
+  .lb-rank { width:28px; font-size:clamp(11px,2.5vw,14px); color:#004466; letter-spacing:2px; flex-shrink:0; text-align:right; }
+  .lb-rank.gold{color:#ffd700;text-shadow:0 0 8px rgba(255,215,0,0.6);}
+  .lb-rank.silver{color:#aaaaaa;}
+  .lb-rank.bronze{color:#cc7733;}
+  .lb-name { flex:1; font-size:clamp(11px,2.8vw,15px); color:#668899; letter-spacing:3px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .lb-name.highlight { color:#00ddff; }
+  .lb-time { font-size:clamp(11px,2.8vw,15px); color:#00aacc; letter-spacing:3px; flex-shrink:0; }
+  .lb-time.highlight { color:#00ffee; text-shadow:0 0 8px rgba(0,255,220,0.5); }
+  .lb-empty { color:#003344; font-size:clamp(10px,2.5vw,13px); letter-spacing:4px; text-align:center; padding:24px 0; }
+  .lb-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+
+  /* ══ MOBILE ══ */
+  #joystick-zone{position:fixed;bottom:0;left:0;width:50%;height:220px;z-index:50;pointer-events:all;display:none;}
+  #joystick-base{position:absolute;bottom:40px;left:40px;width:110px;height:110px;border-radius:50%;background:rgba(255,255,255,0.07);border:2px solid rgba(255,80,80,0.25);}
+  #joystick-knob{position:absolute;width:50px;height:50px;border-radius:50%;background:rgba(255,60,60,0.65);top:30px;left:30px;pointer-events:none;}
+  #sprint-btn{position:fixed;bottom:60px;right:40px;width:80px;height:80px;border-radius:50%;background:rgba(255,60,60,0.2);border:2px solid rgba(255,80,80,0.4);color:#ff4444;font-family:'Courier New',monospace;font-size:11px;font-weight:900;letter-spacing:1px;display:none;align-items:center;justify-content:center;z-index:50;pointer-events:all;user-select:none;-webkit-user-select:none;text-align:center;}
+  #stamina-bar{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);width:120px;height:6px;background:#1a0000;border:1px solid #440000;border-radius:3px;z-index:50;display:none;}
+  #stamina-fill{height:100%;background:#ff4444;border-radius:3px;transition:width .1s;}
+  #hcBadge{position:fixed;top:16px;right:16px;padding:5px 14px;background:rgba(255,80,0,0.15);border:1px solid #ff4400;color:#ff6600;font-family:'Special Elite',monospace;font-size:11px;letter-spacing:4px;z-index:50;display:none;text-transform:uppercase;animation:hcPulse 2s ease-in-out infinite;}
+  @keyframes hcPulse{0%,100%{box-shadow:0 0 8px rgba(255,80,0,.3)}50%{box-shadow:0 0 20px rgba(255,80,0,.6)}}
+  #coinHUD {
+    position:fixed; top:16px; left:16px;
+    display:none; align-items:center; gap:8px;
+    z-index:50; background:rgba(0,0,0,0.45);
+    border:1px solid rgba(255,210,0,0.3); border-radius:20px;
+    padding:6px 14px 6px 10px;
+    font-family:'Special Elite',monospace; font-size:15px;
+    color:#ffe066; letter-spacing:3px;
+    text-shadow:0 0 8px rgba(255,200,0,0.6);
+  }
+  #coinHUD .coin-icon { font-size:18px; line-height:1; }
+  @keyframes coinPop {
+    0%{transform:scale(1)} 50%{transform:scale(1.4)} 100%{transform:scale(1)}
+  }
+  #coinHUD.popped { animation: coinPop 0.25s ease-out; }
+  #timerHUD {
+    position:fixed; top:16px; left:50%; transform:translateX(-50%);
+    display:none; align-items:center; gap:6px;
+    z-index:50; background:rgba(0,0,0,0.5);
+    border:1px solid rgba(0,200,255,0.35); border-radius:20px;
+    padding:6px 18px;
+    font-family:'Special Elite',monospace; font-size:18px;
+    color:#00ddff; letter-spacing:4px;
+    text-shadow:0 0 10px rgba(0,200,255,0.7);
+  }
+</style>
+</head>
+<body>
+<canvas id="gameCanvas"></canvas>
+
+<!-- ══ HOME ══ -->
+<div id="homeScreen" class="screen active">
+  <div class="home-blob home-blob-1"></div>
+  <div class="home-blob home-blob-2"></div>
+  <div class="home-blob home-blob-3"></div>
+  <div class="home-blob home-blob-4"></div>
+  <div class="home-content">
+    <canvas id="homeCharCanvas" width="200" height="200"></canvas>
+    <p class="home-eyebrow">Can you make it out alive?</p>
+    <h1 class="home-title-escape">ESCAPE</h1>
+    <h2 class="home-title-sub"><span class="q1">'</span>Dr Rohan's Hospital<span class="q2">'</span></h2>
+    <div class="home-btns">
+      <button class="btn-play" id="playBtn">▶ &nbsp; Play</button>
+      <button class="btn-notes" id="notesBtn">📋 &nbsp; Update Notes</button>
+    </div>
+  </div>
+  <div class="home-footer">WASD / ARROWS · SHIFT TO SPRINT &nbsp;|&nbsp; MOBILE: JOYSTICK</div>
+</div>
+
+<!-- ══ MODE SELECT ══ -->
+<div id="modeScreen" class="screen">
+  <div class="mode-bg-glow"></div>
+  <button class="back-btn" id="backBtn">← Back</button>
+  <p class="mode-heading">Select Mode</p>
+  <p class="mode-sub">Choose your fate</p>
+  <div class="mode-cards">
+    <button class="mode-card" id="normalCard">
+      <span class="card-icon">🏃</span>
+      <span class="card-name">Normal</span>
+      <span class="card-desc">He's fast.<br>But you might make it.</span>
+      <span class="card-tag">Standard speed</span>
+    </button>
+    <button class="mode-card" id="hardcoreCard">
+      <span class="card-icon">💀</span>
+      <span class="card-name">Hardcore</span>
+      <span class="card-desc">Twice as fast.<br>Good luck.</span>
+      <span class="card-tag">⚠ No mercy</span>
+    </button>
+    <button class="mode-card" id="timedCard">
+      <span class="card-icon">⏱</span>
+      <span class="card-name">Timed</span>
+      <span class="card-desc">How fast can you<br>find the exit?</span>
+      <span class="card-tag">⚡ Race the clock</span>
+    </button>
+  </div>
+</div>
+
+<!-- ══ DEATH ══ -->
+<div id="deathScreen" class="screen">
+  <h1>YOU DIED</h1>
+  <p class="death-sub">HE GOT YOU.</p>
+  <p class="death-mode-label" id="deathModeLabel">☠ HARDCORE MODE ☠</p>
+  <button class="btn btn-red" id="restartBtn">Try Again</button>
+  <button class="btn btn-ghost" id="homeBtn">← Home</button>
+</div>
+
+<!-- ══ ESCAPE (WIN) ══ -->
+<div id="escapeScreen" class="screen">
+  <h1 id="escapeTitle" style="font-family:'Creepster',monospace;font-size:clamp(50px,13vw,130px);color:#00ff88;letter-spacing:8px;text-shadow:0 0 60px #00ff66,0 0 120px rgba(0,255,100,0.4);animation:escapePulse 1.5s ease-in-out infinite;">YOU ESCAPED!</h1>
+  <p style="color:#006633;font-size:clamp(10px,3vw,14px);letter-spacing:6px;margin-top:10px;">YOU MADE IT OUT ALIVE.</p>
+  <p id="escapeTimeLabel" style="color:#00bbdd;font-size:clamp(11px,3vw,15px);letter-spacing:4px;margin-top:10px;display:none;"></p>
+  <p id="escapeCoinLabel" style="color:#cc9900;font-size:clamp(9px,2.5vw,13px);letter-spacing:4px;margin-top:12px;"></p>
+  <button class="btn btn-escape" id="escapeRestartBtn">Play Again</button>
+  <button class="btn btn-ghost" id="escapeHomeBtn">← Home</button>
+</div>
+
+<!-- ══ LEADERBOARD ══ -->
+<div id="leaderboardScreen" class="screen">
+  <div class="lb-bg-glow"></div>
+  <div class="lb-inner">
+    <div class="lb-header">
+      <span class="lb-title">Leaderboard</span>
+      <span class="lb-badge">⏱ TIMED MODE</span>
+    </div>
+
+    <!-- Submit form (shown only for new run) -->
+    <div id="lbSubmit">
+      <p class="lb-your-time">YOUR TIME: <span id="lbYourTime"></span></p>
+      <div class="lb-input-row">
+        <input id="lbNameInput" class="lb-input" type="text" maxlength="16" placeholder="Enter your name" autocomplete="off" spellcheck="false"/>
+        <button class="lb-submit-btn" id="lbSubmitBtn">Submit</button>
+      </div>
+    </div>
+
+    <!-- Rankings table -->
+    <div class="lb-scroll" id="lbList"></div>
+
+    <div class="lb-btns">
+      <button class="btn btn-escape" id="lbPlayAgainBtn">Play Again</button>
+      <button class="btn btn-ghost" id="lbHomeBtn">← Home</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ UPDATE NOTES ══ -->
+<div id="notesScreen" class="screen">
+  <div class="notes-bg-glow"></div>
+  <button class="back-btn" id="notesBackBtn">← Back</button>
+  <div class="notes-inner">
+    <div class="notes-header">
+      <span class="notes-title">Updates</span>
+      <span class="notes-version-badge">CURRENT: v1.19</span>
+    </div>
+    <div class="notes-scroll">
+
+      <div class="version-block">
+        <div class="version-tag">v1.19</div>
+        <div class="version-date">LATEST</div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Leaderboard — after escaping in Timed Mode, enter your name and submit your time</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Top 20 times saved and ranked — 🥇🥈🥉 medals for the top three</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Your entry highlights in the table so you can see exactly where you placed</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Leaderboard persists between sessions — scores are saved for everyone who plays</span></div>
+      </div>
+
+      <div class="version-block">
+        <div class="version-tag">v1.18</div>
+        <div class="version-date">—</div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Timed Mode — race to find the exit as fast as possible while being chased</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Live timer HUD — a blue countdown ticks up in the centre top during Timed Mode</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Final time shown on the escape screen so you can try to beat your best</span></div>
+      </div>
+
+      <div class="version-block">
+        <div class="version-tag">v1.17</div>
+        <div class="version-date">—</div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Kill radius — Dr Rohan now catches you within a danger zone, not just on contact</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Danger ring — a pulsing dashed ring shows his kill radius so you know how close is too close</span></div>
+        <div class="update-entry"><span class="update-tag tag-change">CHANGE</span><span class="update-text">Vignette and heartbeat effects now scale with the new danger zone distance</span></div>
+      </div>
+
+      <div class="version-block">
+        <div class="version-tag">v1.16</div>
+        <div class="version-date">—</div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Exit — a glowing green exit door spawns randomly on the edge of the map each run</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Win condition — reach the exit to escape and see your coin tally</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Escape screen — "YOU ESCAPED!" with coins collected and Play Again / Home buttons</span></div>
+      </div>
+
+      <div class="version-block">
+        <div class="version-tag">v1.15</div>
+        <div class="version-date">—</div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Coins — 10–14 coins spawn randomly across rooms each run, collect them all</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Coin counter HUD — displays your collected coin total in the top left during gameplay</span></div>
+      </div>
+
+      <div class="version-block">
+        <div class="version-tag">v1.14</div>
+        <div class="version-date">—</div>
+        <div class="update-entry"><span class="update-tag tag-change">CHANGE</span><span class="update-text">Enemy redesigned — Dr Rohan now has long brown hair, a white doctor's coat, and carries a syringe</span></div>
+        <div class="update-entry"><span class="update-tag tag-change">CHANGE</span><span class="update-text">Home screen fully redesigned — bright colours, animated character, new title</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Game renamed to "Escape 'Dr Rohan's Hospital'"</span></div>
+      </div>
+
+      <div class="version-block">
+        <div class="version-tag">v1.13</div>
+        <div class="version-date">—</div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Update Notes screen — view version history from the home menu</span></div>
+      </div>
+
+      <div class="version-block">
+        <div class="version-tag">v1.12</div>
+        <div class="version-date">—</div>
+        <div class="update-entry"><span class="update-tag tag-change">CHANGE</span><span class="update-text">Home screen redesigned — Play now leads to a dedicated mode select screen</span></div>
+        <div class="update-entry"><span class="update-tag tag-fix">FIX</span><span class="update-text">Back button added to mode select — return to home without reloading</span></div>
+        <div class="update-entry"><span class="update-tag tag-fix">FIX</span><span class="update-text">Death screen now shows a Home button alongside Try Again</span></div>
+      </div>
+
+      <div class="version-block">
+        <div class="version-tag">v1.11</div>
+        <div class="version-date">—</div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Hardcore Mode — Dr Rohan moves at twice his normal speed</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Home screen with Play and Hardcore mode buttons</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Hardcore visual indicators — glowing eyes, orange vignette, ⚠ badge</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Death screen labels which mode you died in</span></div>
+      </div>
+
+      <div class="version-block">
+        <div class="version-tag">v1.1</div>
+        <div class="version-date">INITIAL RELEASE</div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Core gameplay — run through a multi-room hospital to escape Dr Rohan</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Dr Rohan enemy with BFS pathfinding — navigates walls and corridors to hunt you</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Catch cutscene — Dr Rohan grabs you, drags you to a room, and closes the door</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Sprint mechanic with stamina bar</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Proximity effects — red vignette and heartbeat flash as Dr Rohan gets close</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Full mobile support — virtual joystick and sprint button</span></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ MOBILE ══ -->
+<div id="joystick-zone"><div id="joystick-base"><div id="joystick-knob"></div></div></div>
+<div id="sprint-btn">SPRINT</div>
+<div id="stamina-bar"><div id="stamina-fill"></div></div>
+<div id="hcBadge">⚠ HARDCORE</div>
+<div id="coinHUD"><span class="coin-icon">🪙</span><span id="coinCount">0</span></div>
+<div id="timerHUD">⏱ <span id="timerDisplay">0.00</span></div>
+
+<script>
+const canvas=document.getElementById('gameCanvas'),ctx=canvas.getContext('2d');
+let W,H;
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+resize();window.addEventListener('resize',resize);
+
+// Safari-safe ellipse helper (ctx.ellipse not in older iOS)
+function drawEllipse(c,x,y,rx,ry){
+  c.save();c.translate(x,y);c.scale(rx,ry);c.beginPath();c.arc(0,0,1,0,Math.PI*2);c.restore();
+}
+function roundRect(c,x,y,w,h,r){
+  c.beginPath();
+  c.moveTo(x+r,y);
+  c.lineTo(x+w-r,y);
+  c.quadraticCurveTo(x+w,y,x+w,y+r);
+  c.lineTo(x+w,y+h-r);
+  c.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  c.lineTo(x+r,y+h);
+  c.quadraticCurveTo(x,y+h,x,y+h-r);
+  c.lineTo(x,y+r);
+  c.quadraticCurveTo(x,y,x+r,y);
+  c.closePath();
+}
+
+const isMobile=/Android|iPhone|iPad|iPod|Touch/i.test(navigator.userAgent)||window.innerWidth<700;
+if(isMobile){document.getElementById('joystick-zone').style.display='block';document.getElementById('sprint-btn').style.display='flex';document.getElementById('stamina-bar').style.display='block';}
+
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));if(id)document.getElementById(id).classList.add('active');}
+
+let hardcoreMode=false, timedMode=false;
+let gameState='home',animFrame;
+const TILE=48,MAP_W=30,MAP_H=20;
+const rawMap=[
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+  [1,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,1],
+  [1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,1],
+  [1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,0,1,1,1,1,1,1,1,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,1,1,1,1,0,1,1,1,1,0,1,1,0,1,1,1,0,1,1,1,1,0,1,1,0,0,1],
+  [1,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1],
+  [1,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1],
+  [1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1],
+  [1,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1],
+  [1,0,0,1,1,1,1,0,1,1,1,1,0,1,1,0,1,1,1,0,1,1,1,1,0,1,1,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0,1],
+  [1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0,1],
+  [1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0,1],
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+];
+function isWall(tx,ty){return tx<0||ty<0||tx>=MAP_W||ty>=MAP_H||rawMap[ty][tx]===1;}
+function collidesWithWall(x,y,r){return[[x-r,y-r],[x+r,y-r],[x-r,y+r],[x+r,y+r]].some(([px,py])=>isWall(Math.floor(px/TILE),Math.floor(py/TILE)));}
+
+let player,ginger,stamina,axeSwing,spookFactor,gingerPath,pathTimer,cutsceneTimer,cutscenePhase,camX,camY;
+let coins=[], coinsCollected=0;
+let exitTile={tx:0,ty:0,side:'top'};
+let timerStart=0, elapsedTime=0;
+const PLAYER_R=14,GINGER_R=16,COIN_R=10,KILL_RADIUS=80;
+
+function initGame(){
+  player={x:2.5*TILE,y:2.5*TILE,facing:1,running:false};
+  ginger={x:27.5*TILE,y:17.5*TILE,facing:-1,speed:hardcoreMode?5.2:2.6};
+  stamina=100;axeSwing=0;spookFactor=0;gingerPath=[];pathTimer=0;cutsceneTimer=0;cutscenePhase=0;camX=0;camY=0;
+  coinsCollected=0; timerStart=Date.now(); elapsedTime=0;
+  document.getElementById('coinCount').textContent='0';
+  // Spawn exit on a random edge tile that has floor behind it (not a wall)
+  var exitCandidates=[];
+  var tx,ty;
+  // Top edge (ty=0): check tile below is floor
+  for(tx=1;tx<MAP_W-1;tx++){if(rawMap[1][tx]===0)exitCandidates.push({tx:tx,ty:0,side:'top'});}
+  // Bottom edge (ty=MAP_H-1): check tile above is floor
+  for(tx=1;tx<MAP_W-1;tx++){if(rawMap[MAP_H-2][tx]===0)exitCandidates.push({tx:tx,ty:MAP_H-1,side:'bottom'});}
+  // Left edge (tx=0): check tile to right is floor
+  for(ty=1;ty<MAP_H-1;ty++){if(rawMap[ty][1]===0)exitCandidates.push({tx:0,ty:ty,side:'left'});}
+  // Right edge (tx=MAP_W-1): check tile to left is floor
+  for(ty=1;ty<MAP_H-1;ty++){if(rawMap[ty][MAP_W-2]===0)exitCandidates.push({tx:MAP_W-1,ty:ty,side:'right'});}
+  // Pick random candidate, away from player start corner
+  var filtered=exitCandidates.filter(function(e){return Math.hypot(e.tx-2,e.ty-2)>6;});
+  if(filtered.length===0)filtered=exitCandidates;
+  exitTile=filtered[Math.floor(Math.random()*filtered.length)];
+  coins=[];
+  const numCoins=10+Math.floor(Math.random()*5);
+  let attempts=0;
+  while(coins.length<numCoins&&attempts<500){
+    attempts++;
+    const tx=1+Math.floor(Math.random()*(MAP_W-2));
+    const ty=1+Math.floor(Math.random()*(MAP_H-2));
+    if(isWall(tx,ty))continue;
+    const cx=(tx+0.5)*TILE, cy=(ty+0.5)*TILE;
+    // Keep away from player start
+    if(Math.hypot(cx-2.5*TILE,cy-2.5*TILE)<3*TILE)continue;
+    // No duplicate tiles
+    if(coins.some(c=>Math.abs(c.x-cx)<TILE&&Math.abs(c.y-cy)<TILE))continue;
+    coins.push({x:cx,y:cy,collected:false});
+  }
+}
+
+const keys={};
+window.addEventListener('keydown',e=>keys[e.key]=true);
+window.addEventListener('keyup',e=>keys[e.key]=false);
+
+let joystickActive=false,joystickDX=0,joystickDY=0,sprintPressed=false,jOX=0,jOY=0;
+const jZone=document.getElementById('joystick-zone'),jKnob=document.getElementById('joystick-knob'),sprintBtn=document.getElementById('sprint-btn');
+jZone.addEventListener('touchstart',e=>{e.preventDefault();const t=e.changedTouches[0];joystickActive=true;jOX=t.clientX;jOY=t.clientY;},{passive:false});
+jZone.addEventListener('touchmove',e=>{e.preventDefault();if(!joystickActive)return;const t=e.changedTouches[0];const dx=t.clientX-jOX,dy=t.clientY-jOY,dist=Math.min(Math.sqrt(dx*dx+dy*dy),45),a=Math.atan2(dy,dx);joystickDX=Math.cos(a)*dist/45;joystickDY=Math.sin(a)*dist/45;jKnob.style.transform=`translate(${Math.cos(a)*dist}px,${Math.sin(a)*dist}px)`;},{passive:false});
+jZone.addEventListener('touchend',e=>{e.preventDefault();joystickActive=false;joystickDX=0;joystickDY=0;jKnob.style.transform='';},{passive:false});
+sprintBtn.addEventListener('touchstart',e=>{e.preventDefault();sprintPressed=true;},{passive:false});
+sprintBtn.addEventListener('touchend',e=>{e.preventDefault();sprintPressed=false;},{passive:false});
+
+function bfs(sx,sy,ex,ey){
+  const sTX=Math.floor(sx/TILE),sTY=Math.floor(sy/TILE),eTX=Math.floor(ex/TILE),eTY=Math.floor(ey/TILE);
+  if(sTX===eTX&&sTY===eTY)return[];
+  const q=[[sTX,sTY]],vis={},prev={};vis[`${sTX},${sTY}`]=true;
+  const dirs=[[1,0],[-1,0],[0,1],[0,-1]];
+  while(q.length){const[cx,cy]=q.shift();if(cx===eTX&&cy===eTY){const p=[];let c=`${eTX},${eTY}`;while(prev[c]){const[px,py]=prev[c].split(',').map(Number);p.unshift({x:(px+.5)*TILE,y:(py+.5)*TILE});c=prev[c];}return p;}for(const[dx,dy]of dirs){const nx=cx+dx,ny=cy+dy,k=`${nx},${ny}`;if(!vis[k]&&!isWall(nx,ny)){vis[k]=true;prev[k]=`${cx},${cy}`;q.push([nx,ny]);}}}return[];
+}
+
+function drawFloor(){
+  for(let ty=0;ty<MAP_H;ty++)for(let tx=0;tx<MAP_W;tx++){
+    const wx=tx*TILE-camX,wy=ty*TILE-camY;
+    if(wx>W+TILE||wy>H+TILE||wx<-TILE||wy<-TILE)continue;
+    if(rawMap[ty][tx]===0){ctx.fillStyle='#2a1a10';ctx.fillRect(wx,wy,TILE,TILE);ctx.strokeStyle='#1a0d06';ctx.lineWidth=1;ctx.strokeRect(wx,wy,TILE,TILE);ctx.strokeStyle='#251510';ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(wx+12,wy);ctx.lineTo(wx+12,wy+TILE);ctx.moveTo(wx+28,wy);ctx.lineTo(wx+28,wy+TILE);ctx.stroke();}
+    else{ctx.fillStyle='#0d0d18';ctx.fillRect(wx,wy,TILE,TILE);const bo=(ty%2)?12:0;ctx.fillStyle='#13131f';ctx.fillRect(wx+bo,wy+2,22,TILE-4);ctx.fillRect(wx+bo+26,wy+2,22,TILE-4);ctx.strokeStyle='#0a0a14';ctx.lineWidth=.5;ctx.strokeRect(wx+bo,wy+2,22,TILE-4);ctx.strokeRect(wx+bo+26,wy+2,22,TILE-4);}
+  }
+}
+
+function drawCoins(){
+  const t=Date.now();
+  for(const c of coins){
+    if(c.collected)continue;
+    const x=c.x-camX, y=c.y-camY;
+    if(x<-20||x>W+20||y<-20||y>H+20)continue;
+    const bob=Math.sin(t*0.003+c.x)*4;
+    const spin=Math.abs(Math.cos(t*0.002+c.y)); // fake 3D spin
+    ctx.save();
+    ctx.translate(x,y+bob);
+    // outer glow
+    const grd=ctx.createRadialGradient(0,0,2,0,0,14);
+    grd.addColorStop(0,'rgba(255,230,0,0.35)');
+    grd.addColorStop(1,'rgba(255,180,0,0)');
+    ctx.fillStyle=grd;ctx.beginPath();ctx.arc(0,0,14,0,Math.PI*2);ctx.fill();
+    // coin body (ellipse to simulate spin)
+    const coinW=Math.max(2,10*spin);
+    ctx.fillStyle='#f5c800';
+    drawEllipse(ctx,0,0,coinW,10);ctx.fill();
+    // shine
+    ctx.fillStyle='rgba(255,255,180,0.7)';
+    drawEllipse(ctx,-coinW*0.2,-3,Math.max(1,coinW*0.4),3);ctx.fill();
+    // edge
+    ctx.strokeStyle='#c8a000';ctx.lineWidth=1.5;
+    drawEllipse(ctx,0,0,coinW,10);ctx.stroke();
+    ctx.restore();
+  }
+}
+
+function drawExit(){
+  var wx=exitTile.tx*TILE-camX, wy=exitTile.ty*TILE-camY;
+  var t=Date.now();
+  var pulse=0.6+0.4*Math.abs(Math.sin(t*0.003));
+  ctx.save();
+  // Glow behind exit
+  var gr=ctx.createRadialGradient(wx+TILE/2,wy+TILE/2,4,wx+TILE/2,wy+TILE/2,TILE*1.1);
+  gr.addColorStop(0,'rgba(0,255,120,'+pulse*0.55+')');
+  gr.addColorStop(1,'rgba(0,255,80,0)');
+  ctx.fillStyle=gr;ctx.fillRect(wx-TILE*0.5,wy-TILE*0.5,TILE*2,TILE*2);
+  // Door frame
+  ctx.fillStyle='#1a4a1a';ctx.fillRect(wx+4,wy+4,TILE-8,TILE-8);
+  ctx.strokeStyle='rgba(0,255,100,'+pulse+')';ctx.lineWidth=3;ctx.strokeRect(wx+4,wy+4,TILE-8,TILE-8);
+  // Arrow pointing outward
+  var ax=wx+TILE/2, ay=wy+TILE/2;
+  var adx=0,ady=0;
+  if(exitTile.side==='top')ady=-1;
+  else if(exitTile.side==='bottom')ady=1;
+  else if(exitTile.side==='left')adx=-1;
+  else adx=1;
+  ctx.fillStyle='rgba(0,255,120,'+pulse+')';
+  ctx.beginPath();
+  ctx.moveTo(ax+adx*12,ay+ady*12);
+  ctx.lineTo(ax+adx*12-ady*7,ay+ady*12-adx*7);
+  ctx.lineTo(ax+adx*12+ady*7,ay+ady*12+adx*7);
+  ctx.closePath();ctx.fill();
+  ctx.strokeStyle='rgba(0,255,120,'+pulse*0.6+')';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(ax-adx*8,ay-ady*8);ctx.lineTo(ax+adx*10,ay+ady*10);ctx.stroke();
+  // EXIT label
+  ctx.fillStyle='rgba(0,255,100,'+pulse+')';
+  ctx.font='bold '+(TILE*0.28)+'px Special Elite,monospace';
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('EXIT',ax,ay);
+  ctx.restore();
+}
+
+
+function drawPlayer(px,py,facing){
+  const x=px-camX,y=py-camY;ctx.save();ctx.translate(x,y);if(facing<0)ctx.scale(-1,1);
+  ctx.fillStyle='rgba(0,0,0,.35)';drawEllipse(ctx,0,14,14,6);ctx.fill();
+  ctx.fillStyle='#3a7aff';ctx.fillRect(-8,-2,16,18);ctx.fillStyle='#f5c89a';ctx.beginPath();ctx.arc(0,-10,10,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#2a1a00';ctx.fillRect(-10,-18,20,8);ctx.beginPath();ctx.arc(0,-18,10,Math.PI,0);ctx.fill();
+  ctx.fillStyle='#fff';ctx.fillRect(3,-13,5,4);ctx.fillStyle='#222';ctx.fillRect(5,-13,3,4);
+  const lo=player.running?Math.sin(Date.now()*.02)*8:0;
+  ctx.fillStyle='#1a1a44';ctx.fillRect(-7,16,6,12+lo);ctx.fillRect(1,16,6,12-lo);
+  ctx.fillStyle='#111';ctx.fillRect(-8,27+lo,8,5);ctx.fillRect(0,27-lo,8,5);ctx.restore();
+}
+
+function drawGinger(gx,gy,facing,syringeAngle){
+  const x=gx-camX,y=gy-camY;ctx.save();ctx.translate(x,y);if(facing<0)ctx.scale(-1,1);
+  // Danger zone ring — drawn first so it's behind the character
+  const t=Date.now();
+  const ringPulse=0.3+0.25*Math.abs(Math.sin(t*0.004));
+  const ringColor=hardcoreMode?`rgba(200,0,255,${ringPulse})`:`rgba(220,0,0,${ringPulse})`;
+  const innerColor=hardcoreMode?`rgba(180,0,255,0.06)`:`rgba(200,0,0,0.06)`;
+  // Filled inner glow
+  const rg=ctx.createRadialGradient(0,0,GINGER_R,0,0,KILL_RADIUS);
+  rg.addColorStop(0,innerColor);
+  rg.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=rg;ctx.beginPath();ctx.arc(0,0,KILL_RADIUS,0,Math.PI*2);ctx.fill();
+  // Pulsing outer ring
+  ctx.strokeStyle=ringColor;ctx.lineWidth=2;
+  ctx.setLineDash([10,6]);ctx.lineDashOffset=-(t*0.04)%16;
+  ctx.beginPath();ctx.arc(0,0,KILL_RADIUS,0,Math.PI*2);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.restore();
+  // Now draw the character (separate save/restore so ring isn't flipped)
+  ctx.save();ctx.translate(x,y);if(facing<0)ctx.scale(-1,1);
+  // shadow
+  ctx.fillStyle='rgba(0,0,0,.5)';drawEllipse(ctx,0,14,16,6);ctx.fill();
+  // white doctor coat (body)
+  ctx.fillStyle=hardcoreMode?'#ccccff':'#e8e8e8';ctx.fillRect(-10,-2,20,20);
+  // coat lapels
+  ctx.fillStyle=hardcoreMode?'#aaaadd':'#cccccc';
+  ctx.beginPath();ctx.moveTo(-3,-2);ctx.lineTo(0,6);ctx.lineTo(3,-2);ctx.closePath();ctx.fill();
+  // coat buttons
+  ctx.fillStyle='#aaaaaa';ctx.beginPath();ctx.arc(0,2,1.5,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.arc(0,8,1.5,0,Math.PI*2);ctx.fill();
+  // pocket
+  ctx.strokeStyle='#bbbbbb';ctx.lineWidth=1;ctx.strokeRect(5,3,7,6);
+  // skin - neck
+  ctx.fillStyle='#e8a87c';ctx.fillRect(-3,-3,6,3);
+  // head
+  ctx.fillStyle='#e8a87c';ctx.beginPath();ctx.arc(0,-12,12,0,Math.PI*2);ctx.fill();
+  // LONG BROWN HAIR - top
+  ctx.fillStyle='#4a2800';ctx.fillRect(-12,-22,24,10);ctx.beginPath();ctx.arc(0,-22,12,Math.PI,0);ctx.fill();
+  // long hair flowing down sides
+  ctx.fillStyle='#3d2000';
+  ctx.beginPath();ctx.moveTo(-12,-22);ctx.quadraticCurveTo(-16,-10,-14,10);ctx.lineTo(-10,10);ctx.quadraticCurveTo(-12,-8,-8,-22);ctx.closePath();ctx.fill();
+  ctx.beginPath();ctx.moveTo(12,-22);ctx.quadraticCurveTo(16,-10,14,10);ctx.lineTo(10,10);ctx.quadraticCurveTo(12,-8,8,-22);ctx.closePath();ctx.fill();
+  // hair highlights
+  ctx.fillStyle='#5a3410';
+  ctx.beginPath();ctx.moveTo(-6,-22);ctx.quadraticCurveTo(-7,-10,-6,8);ctx.lineTo(-4,8);ctx.quadraticCurveTo(-5,-10,-4,-22);ctx.closePath();ctx.fill();
+  // angry eyes
+  ctx.fillStyle='#fff';ctx.fillRect(-8,-15,6,4);ctx.fillRect(2,-15,6,4);
+  ctx.fillStyle='#111';ctx.fillRect(-7,-15,4,4);ctx.fillRect(3,-15,4,4);
+  ctx.strokeStyle='#2a1400';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(-9,-17);ctx.lineTo(-3,-19);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(3,-19);ctx.lineTo(9,-17);ctx.stroke();
+  // mouth - grimace
+  ctx.strokeStyle='#7a4a2a';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(-4,-7);ctx.lineTo(4,-7);ctx.stroke();
+  // legs - dark trousers
+  const gl=Math.sin(Date.now()*.018)*9;
+  ctx.fillStyle='#2a2a4a';ctx.fillRect(-8,18,7,14+gl);ctx.fillRect(1,18,7,14-gl);
+  ctx.fillStyle='#111';ctx.fillRect(-9,31+gl,9,5);ctx.fillRect(0,31-gl,9,5);
+  // SYRINGE in raised hand
+  ctx.save();ctx.translate(14,-6);ctx.rotate(syringeAngle);
+  // syringe barrel (clear)
+  ctx.fillStyle='rgba(200,240,255,0.85)';ctx.strokeStyle='#88aacc';ctx.lineWidth=1;
+  roundRect(ctx,-3,-28,7,24,2);ctx.fill();ctx.stroke();
+  // liquid inside (green glowing)
+  ctx.fillStyle=hardcoreMode?'rgba(180,0,255,0.8)':'rgba(0,220,80,0.85)';
+  ctx.fillRect(-2,-26,5,16);
+  // plunger top
+  ctx.fillStyle='#cc3333';ctx.fillRect(-4,-30,9,4);
+  // plunger rod
+  ctx.fillStyle='#888';ctx.fillRect(-1,-26,3,4);
+  // needle
+  ctx.fillStyle='#cccccc';ctx.fillRect(-0.5,-4,2,10);
+  // needle tip gleam
+  ctx.fillStyle='#ffffff';ctx.beginPath();ctx.arc(0.5,-4,1,0,Math.PI*2);ctx.fill();
+  // measurement lines
+  ctx.strokeStyle='rgba(0,0,0,0.3)';ctx.lineWidth=0.5;
+  for(let i=0;i<4;i++){ctx.beginPath();ctx.moveTo(-3,-24+i*5);ctx.lineTo(0,-24+i*5);ctx.stroke();}
+  ctx.restore();
+  if(hardcoreMode){ctx.fillStyle='rgba(180,0,255,.7)';ctx.beginPath();ctx.arc(-5,-13,3,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(5,-13,3,0,Math.PI*2);ctx.fill();}
+  ctx.restore();
+}
+
+function easeIn(t){return t*t;}
+function drawCutscene(){
+  ctx.fillStyle='#0a0005';ctx.fillRect(0,0,W,H);ctx.fillStyle='#1a0d06';ctx.fillRect(0,H*.55,W,H*.45);ctx.fillStyle='#0d0818';ctx.fillRect(0,0,W,H*.55);
+  const dX=W*.8,dW=100,dH=180,dY=H*.55-180;
+  const dOA=Math.max(0,Math.min(1,cutscenePhase>=2?(cutsceneTimer-160)/40:0));
+  ctx.fillStyle='#3a1a08';ctx.fillRect(dX-8,dY-8,dW+16,dH+8);ctx.fillStyle='#4a2a10';ctx.fillRect(dX,dY,dW*(1-dOA*.85),dH);ctx.fillStyle='#5a3a18';
+  if(dOA<.95){ctx.fillRect(dX+dW*.1,dY+20,dW*.3*(1-dOA),60);ctx.fillRect(dX+dW*.1,dY+100,dW*.3*(1-dOA),60);}
+  if(dOA<.5){ctx.fillStyle='#ccaa44';ctx.beginPath();ctx.arc(dX+dW*.82,dY+dH*.5,7,0,Math.PI*2);ctx.fill();}
+  if(cutscenePhase>=2){ctx.fillStyle=`rgba(255,100,0,${dOA*.6})`;ctx.fillRect(dX,dY,dW,dH);}
+  const p1=Math.min(cutsceneTimer/60,1),p3=cutscenePhase>=2?Math.min((cutsceneTimer-100)/60,1):0;
+  const pBX=W*.42,gX=-80+(W*.32+80)*easeIn(p1),pX=cutscenePhase>=2?pBX+(dX-60-pBX)*easeIn(p3):pBX,cY=H*.55-40;
+  ctx.save();ctx.translate(pX,cY);if(cutscenePhase===1)ctx.translate(Math.sin(Date.now()*.08)*4,Math.sin(Date.now()*.07)*3);
+  // player cutscene
+  ctx.fillStyle='#3a7aff';ctx.fillRect(-8,-20,16,20);ctx.fillStyle='#f5c89a';ctx.beginPath();ctx.arc(0,-28,12,0,Math.PI*2);ctx.fill();ctx.fillStyle='#2a1a00';ctx.fillRect(-12,-38,24,10);ctx.beginPath();ctx.arc(0,-38,12,Math.PI,0);ctx.fill();ctx.fillStyle='#fff';ctx.fillRect(-8,-32,7,6);ctx.fillRect(1,-32,7,6);ctx.fillStyle='#1a1aff';ctx.fillRect(-6,-32,5,6);ctx.fillRect(3,-32,5,6);ctx.fillStyle='#000';ctx.fillRect(-5,-32,3,6);ctx.fillRect(4,-32,3,6);ctx.fillStyle='#550000';ctx.beginPath();ctx.arc(0,-20,5,0,Math.PI);ctx.fill();ctx.fillStyle='#1a1a44';ctx.fillRect(-7,0,6,16);ctx.fillRect(1,0,6,16);
+  ctx.restore();
+  ctx.save();ctx.translate(gX,cY);
+  // Dr Rohan cutscene - white coat, long brown hair, syringe raised
+  ctx.fillStyle=hardcoreMode?'#ccccff':'#e8e8e8';ctx.fillRect(-10,-20,20,20);
+  ctx.fillStyle=hardcoreMode?'#aaaadd':'#cccccc';ctx.beginPath();ctx.moveTo(-3,-20);ctx.lineTo(0,-12);ctx.lineTo(3,-20);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#aaaaaa';ctx.beginPath();ctx.arc(0,-16,1.5,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(0,-10,1.5,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='#bbbbbb';ctx.lineWidth=1;ctx.strokeRect(5,-17,7,6);
+  ctx.fillStyle='#e8a87c';ctx.beginPath();ctx.arc(0,-28,12,0,Math.PI*2);ctx.fill();
+  // long brown hair
+  ctx.fillStyle='#4a2800';ctx.fillRect(-12,-38,24,10);ctx.beginPath();ctx.arc(0,-38,12,Math.PI,0);ctx.fill();
+  ctx.fillStyle='#3d2000';
+  ctx.beginPath();ctx.moveTo(-12,-38);ctx.quadraticCurveTo(-16,-26,-14,-10);ctx.lineTo(-10,-10);ctx.quadraticCurveTo(-12,-24,-8,-38);ctx.closePath();ctx.fill();
+  ctx.beginPath();ctx.moveTo(12,-38);ctx.quadraticCurveTo(16,-26,14,-10);ctx.lineTo(10,-10);ctx.quadraticCurveTo(12,-24,8,-38);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#5a3410';ctx.beginPath();ctx.moveTo(-6,-38);ctx.quadraticCurveTo(-7,-26,-6,-10);ctx.lineTo(-4,-10);ctx.quadraticCurveTo(-5,-26,-4,-38);ctx.closePath();ctx.fill();
+  // angry eyes
+  ctx.fillStyle='#fff';ctx.fillRect(-8,-31,6,5);ctx.fillRect(2,-31,6,5);ctx.fillStyle='#111';ctx.fillRect(-7,-31,4,5);ctx.fillRect(3,-31,4,5);
+  ctx.strokeStyle='#2a1400';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-9,-34);ctx.lineTo(-3,-36);ctx.stroke();ctx.beginPath();ctx.moveTo(3,-36);ctx.lineTo(9,-34);ctx.stroke();
+  ctx.strokeStyle='#7a4a2a';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(-4,-24);ctx.lineTo(4,-24);ctx.stroke();
+  // legs
+  ctx.fillStyle='#2a2a4a';ctx.fillRect(-8,0,7,18);ctx.fillRect(1,0,7,18);
+  // syringe raised overhead
+  ctx.save();ctx.translate(14,-30);ctx.rotate(-.7);
+  ctx.fillStyle='rgba(200,240,255,0.9)';ctx.strokeStyle='#88aacc';ctx.lineWidth=1;
+  roundRect(ctx,-3,-20,7,22,2);ctx.fill();ctx.stroke();
+  ctx.fillStyle=hardcoreMode?'rgba(180,0,255,0.8)':'rgba(0,220,80,0.85)';ctx.fillRect(-2,-18,5,14);
+  ctx.fillStyle='#cc3333';ctx.fillRect(-4,-22,9,4);
+  ctx.fillStyle='#888';ctx.fillRect(-1,-18,3,4);
+  ctx.fillStyle='#cccccc';ctx.fillRect(-0.5,2,2,10);
+  ctx.fillStyle='#ffffff';ctx.beginPath();ctx.arc(0.5,2,1,0,Math.PI*2);ctx.fill();
+  ctx.restore();
+  if(hardcoreMode){ctx.fillStyle='rgba(180,0,255,.8)';ctx.beginPath();ctx.arc(-5,-29,3,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(5,-29,3,0,Math.PI*2);ctx.fill();}
+  ctx.restore();
+  if(cutscenePhase>=1&&gX<pX-20){const a=Math.min((cutsceneTimer-60)/20,1);ctx.globalAlpha=a;ctx.strokeStyle='#8b1a1a';ctx.lineWidth=6;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(gX+20,cY-10);ctx.lineTo(pX-10,cY-10);ctx.stroke();ctx.globalAlpha=1;}
+  if(cutsceneTimer<50){ctx.fillStyle=`rgba(255,40,40,${Math.min(cutsceneTimer/20,1)})`;ctx.font=`bold ${Math.floor(W*.04)}px 'Special Elite','Courier New'`;ctx.textAlign='center';ctx.fillText('HE CAUGHT YOU...',W/2,H*.12);}
+  if(cutscenePhase>=3){const ft=(cutsceneTimer-200)/40;if(ft>0){ctx.fillStyle=`rgba(0,0,0,${Math.min(ft,1)})`;ctx.fillRect(0,0,W,H);}}
+}
+
+function moveGinger(){
+  pathTimer++;if(pathTimer>=24||gingerPath.length===0){pathTimer=0;gingerPath=bfs(ginger.x,ginger.y,player.x,player.y);}
+  if(gingerPath.length>0){const t=gingerPath[0],dx=t.x-ginger.x,dy=t.y-ginger.y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<4){gingerPath.shift();}else{const s=ginger.speed,nx=ginger.x+(dx/dist)*s,ny=ginger.y+(dy/dist)*s;if(!collidesWithWall(nx,ginger.y,GINGER_R-2))ginger.x=nx;if(!collidesWithWall(ginger.x,ny,GINGER_R-2))ginger.y=ny;ginger.facing=dx>0?1:-1;}}
+}
+
+function update(){
+  if(gameState!=='playing')return;
+  const sprinting=(keys['Shift']||sprintPressed)&&stamina>0;
+  stamina=sprinting?Math.max(0,stamina-.8):Math.min(100,stamina+.3);
+  document.getElementById('stamina-fill').style.width=stamina+'%';
+  const spd=sprinting?5.5:3.2;let dx=0,dy=0;
+  if(isMobile){dx=joystickDX;dy=joystickDY;}else{if(keys['ArrowLeft']||keys['a']||keys['A'])dx-=1;if(keys['ArrowRight']||keys['d']||keys['D'])dx+=1;if(keys['ArrowUp']||keys['w']||keys['W'])dy-=1;if(keys['ArrowDown']||keys['s']||keys['S'])dy+=1;}
+  const len=Math.sqrt(dx*dx+dy*dy);if(len>0){dx/=len;dy/=len;}
+  player.running=len>0;if(dx!==0)player.facing=dx>0?1:-1;
+  const nx=player.x+dx*spd,ny=player.y+dy*spd;
+  if(!collidesWithWall(nx,player.y,PLAYER_R))player.x=nx;if(!collidesWithWall(player.x,ny,PLAYER_R))player.y=ny;
+  moveGinger();
+  // Coin collection
+  for(const c of coins){
+    if(c.collected)continue;
+    if(Math.hypot(player.x-c.x,player.y-c.y)<PLAYER_R+COIN_R){
+      c.collected=true;
+      coinsCollected++;
+      const hud=document.getElementById('coinHUD');
+      document.getElementById('coinCount').textContent=coinsCollected;
+      hud.classList.remove('popped');
+      void hud.offsetWidth; // reflow to restart animation
+      hud.classList.add('popped');
+    }
+  }
+  if(timedMode){
+    elapsedTime=(Date.now()-timerStart)/1000;
+    document.getElementById('timerDisplay').textContent=elapsedTime.toFixed(2);
+  }
+  const dist=Math.hypot(player.x-ginger.x,player.y-ginger.y);
+  axeSwing=dist<200?Math.sin(Date.now()*.012)*.5+Math.sin(Date.now()*.007)*.3:Math.sin(Date.now()*.003)*.15;
+  spookFactor=Math.max(0,1-dist/(KILL_RADIUS*3.5));
+  camX=Math.max(0,Math.min(MAP_W*TILE-W,player.x-W/2));camY=Math.max(0,Math.min(MAP_H*TILE-H,player.y-H/2));
+  if(dist<KILL_RADIUS){gameState='cutscene';cutsceneTimer=0;cutscenePhase=0;}
+  // Exit detection
+  var ex=(exitTile.tx+0.5)*TILE, ey=(exitTile.ty+0.5)*TILE;
+  if(Math.hypot(player.x-ex,player.y-ey)<PLAYER_R+TILE*0.55){
+    gameState='escaped';
+    elapsedTime=(Date.now()-timerStart)/1000;
+    var tLabel=document.getElementById('escapeTimeLabel');
+    if(timedMode){
+      tLabel.textContent='⏱ YOUR TIME: '+elapsedTime.toFixed(2)+'s';tLabel.style.display='block';
+      document.getElementById('escapeCoinLabel').textContent='🪙 COINS COLLECTED: '+coinsCollected;
+      lbShowAfterRun(elapsedTime);
+    } else {
+      tLabel.style.display='none';
+      document.getElementById('escapeCoinLabel').textContent='🪙 COINS COLLECTED: '+coinsCollected;
+      showScreen('escapeScreen');
+    }
+  }
+}
+
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  if(gameState==='playing'){
+    drawFloor();
+    drawCoins();
+    drawExit();
+    if(spookFactor>0){const g=ctx.createRadialGradient(W/2,H/2,H*.2,W/2,H/2,H),c=hardcoreMode?'120,40,0':'80,0,0';g.addColorStop(0,`rgba(${c},0)`);g.addColorStop(1,`rgba(${c},${spookFactor*.65})`);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);}
+    drawGinger(ginger.x,ginger.y,ginger.facing,axeSwing);drawPlayer(player.x,player.y,player.facing);
+    const vg=ctx.createRadialGradient(W/2,H/2,H*.35,W/2,H/2,H*.85);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.7)');ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
+    if(spookFactor>.4){const hb=Math.abs(Math.sin(Date.now()*(hardcoreMode?.01:.006)))*spookFactor*(hardcoreMode?.4:.25);ctx.fillStyle=hardcoreMode?`rgba(200,80,0,${hb})`:`rgba(180,0,0,${hb})`;ctx.fillRect(0,0,W,H);}
+  } else if(gameState==='cutscene'){
+    drawCutscene();cutsceneTimer++;
+    if(cutsceneTimer>=60)cutscenePhase=1;if(cutsceneTimer>=100)cutscenePhase=2;if(cutsceneTimer>=200)cutscenePhase=3;
+    if(cutsceneTimer>=240){gameState='dead';showScreen('deathScreen');document.getElementById('deathModeLabel').style.display=hardcoreMode?'block':'none';}
+  }
+}
+
+function loop(){update();draw();animFrame=requestAnimationFrame(loop);}
+
+function startGame(hc,timed){
+  hardcoreMode=hc; timedMode=timed||false;
+  initGame();gameState='playing';
+  showScreen(null);
+  document.getElementById('hcBadge').style.display=hc?'block':'none';
+  document.getElementById('coinHUD').style.display='flex';
+  document.getElementById('timerHUD').style.display=timed?'flex':'none';
+  if(animFrame)cancelAnimationFrame(animFrame);loop();
+}
+function goHome(){
+  gameState='home';if(animFrame)cancelAnimationFrame(animFrame);ctx.clearRect(0,0,W,H);
+  document.getElementById('hcBadge').style.display='none';
+  document.getElementById('coinHUD').style.display='none';
+  document.getElementById('timerHUD').style.display='none';
+  showScreen('homeScreen');
+}
+// ── LEADERBOARD ──
+const LB_KEY = 'lb_timed_scores';
+let pendingScore = null; // {time, newEntry: index} set when showing leaderboard after a run
+
+async function lbLoad(){
+  try{
+    const r = await window.storage.get(LB_KEY, true);
+    return r ? JSON.parse(r.value) : [];
+  }catch(e){ return []; }
+}
+
+async function lbSave(scores){
+  try{ await window.storage.set(LB_KEY, JSON.stringify(scores), true); }catch(e){}
+}
+
+async function lbRender(highlightIdx){
+  const scores = await lbLoad();
+  const list = document.getElementById('lbList');
+  if(scores.length===0){
+    list.innerHTML='<p class="lb-empty">NO ENTRIES YET — BE THE FIRST</p>';
+    return;
+  }
+  const medals=['🥇','🥈','🥉'];
+  const rankClasses=['gold','silver','bronze'];
+  list.innerHTML = scores.map((s,i)=>{
+    const hl = i===highlightIdx;
+    const medal = i<3 ? medals[i] : (i+1);
+    const rankCls = i<3 ? rankClasses[i] : '';
+    return `<div class="lb-row">
+      <span class="lb-rank ${rankCls}">${medal}</span>
+      <span class="lb-name${hl?' highlight':''}">${s.name}</span>
+      <span class="lb-time${hl?' highlight':''}">${s.time.toFixed(2)}s</span>
+    </div>`;
+  }).join('');
+}
+
+async function lbShowAfterRun(time){
+  pendingScore = {time};
+  document.getElementById('lbYourTime').textContent = time.toFixed(2)+'s';
+  document.getElementById('lbNameInput').value = '';
+  document.getElementById('lbSubmit').style.display = 'block';
+  await lbRender(null);
+  showScreen('leaderboardScreen');
+}
+
+async function lbSubmit(){
+  const name = document.getElementById('lbNameInput').value.trim();
+  if(!name) return;
+  const scores = await lbLoad();
+  scores.push({name, time: pendingScore.time});
+  scores.sort((a,b)=>a.time-b.time);
+  if(scores.length>20) scores.length=20;
+  await lbSave(scores);
+  const idx = scores.findIndex(s=>s.name===name&&s.time===pendingScore.time);
+  document.getElementById('lbSubmit').style.display = 'none';
+  await lbRender(idx);
+  pendingScore = null;
+}
+
+document.getElementById('lbSubmitBtn').addEventListener('click', lbSubmit);
+document.getElementById('lbNameInput').addEventListener('keydown', e=>{ if(e.key==='Enter') lbSubmit(); });
+document.getElementById('lbPlayAgainBtn').addEventListener('click',()=>startGame(hardcoreMode,timedMode));
+document.getElementById('lbHomeBtn').addEventListener('click', goHome);
+
+
+document.getElementById('notesBtn').addEventListener('click',()=>showScreen('notesScreen'));
+document.getElementById('notesBackBtn').addEventListener('click',()=>showScreen('homeScreen'));
+document.getElementById('backBtn').addEventListener('click',()=>showScreen('homeScreen'));
+document.getElementById('normalCard').addEventListener('click',()=>startGame(false,false));
+document.getElementById('hardcoreCard').addEventListener('click',()=>startGame(true,false));
+document.getElementById('timedCard').addEventListener('click',()=>startGame(false,true));
+document.getElementById('restartBtn').addEventListener('click',()=>startGame(hardcoreMode,timedMode));
+document.getElementById('homeBtn').addEventListener('click',goHome);
+document.getElementById('escapeRestartBtn').addEventListener('click',()=>startGame(hardcoreMode,timedMode));
+document.getElementById('escapeHomeBtn').addEventListener('click',goHome);
+
+// ── HOME CHARACTER ANIMATION ──
+const hcc = document.getElementById('homeCharCanvas');
+const hctx = hcc.getContext('2d');
+function drawHomeChar() {
+  hctx.clearRect(0,0,200,200);
+  const cx=100, cy=130;
+  const t = Date.now();
+  const bob = Math.sin(t*0.0026)*4; // subtle secondary bob (CSS handles main)
+  const legSwing = Math.sin(t*0.004)*10;
+  const armSwing = Math.sin(t*0.004)*8;
+
+  hctx.save();
+  hctx.translate(cx, cy + bob);
+  const s = 2.6; // scale up for canvas
+  hctx.scale(s,s);
+
+  // shadow
+  hctx.fillStyle='rgba(0,0,0,0.25)';
+  drawEllipse(hctx,0,20,14,5);hctx.fill();
+
+  // legs
+  hctx.fillStyle='#1a1a55';
+  hctx.fillRect(-7,16,6,14+legSwing);
+  hctx.fillRect(1,16,6,14-legSwing);
+  // shoes
+  hctx.fillStyle='#111';
+  hctx.fillRect(-8,29+legSwing,9,5);
+  hctx.fillRect(0,29-legSwing,9,5);
+
+  // body
+  hctx.fillStyle='#3a7aff';
+  hctx.fillRect(-10,-2,20,19);
+  // shirt stripe
+  hctx.fillStyle='rgba(255,255,255,0.12)';
+  hctx.fillRect(-10,4,20,3);
+
+  // arms swinging
+  hctx.fillStyle='#3a7aff';
+  hctx.save();hctx.translate(-10,2);hctx.rotate(armSwing*0.04);
+  hctx.fillRect(-5,0,5,14);hctx.restore();
+  hctx.save();hctx.translate(10,2);hctx.rotate(-armSwing*0.04);
+  hctx.fillRect(0,0,5,14);hctx.restore();
+
+  // neck
+  hctx.fillStyle='#f5c89a';hctx.fillRect(-3,-4,6,4);
+
+  // head
+  hctx.fillStyle='#f5c89a';
+  hctx.beginPath();hctx.arc(0,-14,12,0,Math.PI*2);hctx.fill();
+
+  // hair
+  hctx.fillStyle='#2a1a00';
+  hctx.fillRect(-12,-24,24,11);
+  hctx.beginPath();hctx.arc(0,-24,12,Math.PI,0);hctx.fill();
+
+  // eyes — wide, slightly worried
+  hctx.fillStyle='#fff';hctx.fillRect(-7,-18,6,5);hctx.fillRect(1,-18,6,5);
+  hctx.fillStyle='#3355ff';hctx.fillRect(-6,-18,4,5);hctx.fillRect(2,-18,4,5);
+  hctx.fillStyle='#000';hctx.fillRect(-5,-18,3,5);hctx.fillRect(3,-18,3,5);
+  // eyebrow worried
+  hctx.strokeStyle='#2a1a00';hctx.lineWidth=1.5;
+  hctx.beginPath();hctx.moveTo(-7,-21);hctx.lineTo(-2,-23);hctx.stroke();
+  hctx.beginPath();hctx.moveTo(2,-23);hctx.lineTo(7,-21);hctx.stroke();
+  // slight sweat drop
+  hctx.fillStyle='rgba(100,180,255,0.8)';
+  hctx.beginPath();hctx.arc(9,-20,2,0,Math.PI*2);hctx.fill();
+
+  // mouth — small open
+  hctx.fillStyle='#7a3a1a';
+  hctx.beginPath();hctx.arc(0,-8,3,0,Math.PI);hctx.fill();
+
+  hctx.restore();
+  requestAnimationFrame(drawHomeChar);
+}
+drawHomeChar();
+</script>
+</body>
+</html>
