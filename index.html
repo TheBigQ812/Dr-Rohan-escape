@@ -346,7 +346,21 @@
   .lb-empty { color:#003344; font-size:clamp(10px,2.5vw,13px); letter-spacing:4px; text-align:center; padding:24px 0; }
   .lb-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
 
-  /* ══ SHOP BUTTON (home) ══ */
+  .btn-versions {
+    width:clamp(220px,55vw,320px); padding:13px 0;
+    background: rgba(80,120,255,0.12);
+    color:#aabbff;
+    font-family:'Special Elite',monospace; font-size:clamp(12px,3.2vw,16px);
+    font-weight:700; letter-spacing:6px; text-transform:uppercase;
+    border:1px solid rgba(100,150,255,0.3); cursor:pointer; border-radius:4px;
+    transition:all .15s; position:relative; z-index:1;
+  }
+  .btn-versions:hover,.btn-versions:active{
+    color:#ccddff; border-color:rgba(150,200,255,0.6);
+    background:rgba(80,120,255,0.22);
+    transform:translateY(-1px);
+    box-shadow:0 4px 20px rgba(100,150,255,0.25);
+  }
   .btn-shop {
     width:clamp(220px,55vw,320px); padding:13px 0;
     background: linear-gradient(135deg,#cc00aa,#ff44dd);
@@ -450,7 +464,109 @@
   /* Confirm/action area */
   .shop-action { margin-top:14px; display:flex; gap:10px; justify-content:center; flex-shrink:0; flex-wrap:wrap; }
 
-  /* ══ MOBILE ══ */
+  /* ══ VERSION SELECT ══ */
+  #versionScreen {
+    background: linear-gradient(160deg,#0a0a2e 0%,#0d001a 40%,#1a000a 100%);
+    overflow:hidden;
+  }
+  #versionScreen::after {
+    content:''; position:absolute; inset:0; pointer-events:none; z-index:2;
+    background: repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.07) 3px,rgba(0,0,0,0.07) 4px);
+  }
+  .ver-blob {
+    position:absolute; border-radius:50%; pointer-events:none; filter:blur(90px); opacity:0.45;
+    animation:blobFloat 8s ease-in-out infinite;
+  }
+  .ver-blob-1 { width:380px;height:380px; background:#0055ff; top:-80px; left:-80px; animation-delay:-2s; }
+  .ver-blob-2 { width:300px;height:300px; background:#aa00ff; bottom:-40px; right:-60px; animation-delay:-5s; }
+  .ver-blob-3 { width:240px;height:240px; background:#00ccff; top:40%; right:15%; animation-delay:-3s; }
+  .ver-inner {
+    position:relative; z-index:3;
+    width:min(640px,94vw); max-height:88vh;
+    display:flex; flex-direction:column; align-items:center;
+  }
+  .ver-heading {
+    font-family:'Creepster',monospace; font-size:clamp(18px,5vw,36px);
+    color:#fff; letter-spacing:10px; text-transform:uppercase;
+    text-shadow:0 0 20px #fff, 0 0 50px rgba(100,150,255,0.7);
+    margin-bottom:6px;
+  }
+  .ver-sub { color:rgba(180,200,255,0.5); font-size:clamp(9px,2vw,12px); letter-spacing:5px; margin-bottom:28px; }
+  .ver-scroll {
+    width:100%; overflow-y:auto; flex:1;
+    scrollbar-width:thin; scrollbar-color:rgba(100,150,255,0.3) transparent;
+  }
+  .ver-scroll::-webkit-scrollbar{width:4px;}
+  /* ══ VERSION SELECT ══ */
+  #versionScreen {
+    background: linear-gradient(160deg,#0a0a2e 0%,#0d001a 40%,#1a000a 100%);
+    overflow:hidden;
+  }
+  #versionScreen::after {
+    content:''; position:absolute; inset:0; pointer-events:none; z-index:2;
+    background: repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.07) 3px,rgba(0,0,0,0.07) 4px);
+  }
+  .ver-blob {
+    position:absolute; border-radius:50%; pointer-events:none; filter:blur(90px); opacity:0.45;
+    animation:blobFloat 8s ease-in-out infinite;
+  }
+  .ver-blob-1 { width:380px;height:380px; background:#0055ff; top:-80px; left:-80px; animation-delay:-2s; }
+  .ver-blob-2 { width:300px;height:300px; background:#aa00ff; bottom:-40px; right:-60px; animation-delay:-5s; }
+  .ver-blob-3 { width:240px;height:240px; background:#00ccff; top:40%; right:15%; animation-delay:-3s; }
+  .ver-inner {
+    position:relative; z-index:3;
+    width:min(640px,94vw); max-height:88vh;
+    display:flex; flex-direction:column; align-items:center;
+  }
+  .ver-heading {
+    font-family:'Creepster',monospace; font-size:clamp(18px,5vw,36px);
+    color:#fff; letter-spacing:10px; text-transform:uppercase;
+    text-shadow:0 0 20px #fff, 0 0 50px rgba(100,150,255,0.7);
+    margin-bottom:6px;
+  }
+  .ver-sub { color:rgba(180,200,255,0.5); font-size:clamp(9px,2vw,12px); letter-spacing:5px; margin-bottom:28px; }
+  .ver-scroll {
+    width:100%; overflow-y:auto; flex:1;
+    scrollbar-width:thin; scrollbar-color:rgba(100,150,255,0.3) transparent;
+    padding-right:4px;
+  }
+  .ver-scroll::-webkit-scrollbar{width:4px;}
+  .ver-scroll::-webkit-scrollbar-thumb{background:rgba(100,150,255,0.3);border-radius:2px;}
+  .ver-list { display:flex; flex-direction:column; gap:10px; padding-bottom:16px; }
+  .ver-card {
+    width:100%; padding:14px 18px; cursor:pointer;
+    background:rgba(255,255,255,0.04); border:1px solid rgba(100,150,255,0.15);
+    border-radius:8px; display:flex; align-items:center; gap:16px;
+    transition:all .15s; position:relative; overflow:hidden; text-align:left;
+  }
+  .ver-card:hover { background:rgba(100,150,255,0.1); border-color:rgba(100,150,255,0.45); transform:translateX(4px); box-shadow:0 0 20px rgba(80,120,255,0.2); }
+  .ver-card.ver-current { border-color:rgba(255,80,150,0.5); background:rgba(255,80,150,0.08); }
+  .ver-card.ver-current:hover { background:rgba(255,80,150,0.14); border-color:rgba(255,80,150,0.7); }
+  .ver-num {
+    font-family:'Creepster',monospace; font-size:clamp(18px,4.5vw,28px);
+    color:rgba(150,180,255,0.9); letter-spacing:4px; flex-shrink:0; width:clamp(60px,14vw,80px);
+  }
+  .ver-card.ver-current .ver-num { color:#ff88cc; text-shadow:0 0 12px rgba(255,100,180,0.5); }
+  .ver-info { flex:1; min-width:0; }
+  .ver-label {
+    font-size:clamp(10px,2.5vw,13px); color:rgba(200,220,255,0.8);
+    letter-spacing:3px; margin-bottom:6px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .ver-current-badge {
+    font-size:8px; letter-spacing:3px; padding:2px 8px; border-radius:2px;
+    background:rgba(255,80,150,0.2); color:#ff88cc; border:1px solid rgba(255,80,150,0.4);
+    text-transform:uppercase;
+  }
+  .ver-pills { display:flex; gap:5px; flex-wrap:wrap; }
+  .ver-pill {
+    font-size:clamp(7px,1.8vw,9px); letter-spacing:2px; padding:2px 7px;
+    border-radius:10px; text-transform:uppercase; white-space:nowrap;
+  }
+  .pill-on  { background:rgba(0,200,100,0.12); color:#44dd88; border:1px solid rgba(0,200,100,0.25); }
+  .pill-off { background:rgba(255,255,255,0.04); color:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.08); text-decoration:line-through; }
+  .ver-arrow { color:rgba(100,150,255,0.4); font-size:18px; flex-shrink:0; transition:all .15s; }
+  .ver-card:hover .ver-arrow { color:rgba(150,200,255,0.8); transform:translateX(3px); }
   #joystick-zone{position:fixed;bottom:0;left:0;width:50%;height:220px;z-index:50;pointer-events:all;display:none;}
   #joystick-base{position:absolute;bottom:40px;left:40px;width:110px;height:110px;border-radius:50%;background:rgba(255,255,255,0.07);border:2px solid rgba(255,80,80,0.25);}
   #joystick-knob{position:absolute;width:50px;height:50px;border-radius:50%;background:rgba(255,60,60,0.65);top:30px;left:30px;pointer-events:none;}
@@ -484,7 +600,146 @@
     color:#00ddff; letter-spacing:4px;
     text-shadow:0 0 10px rgba(0,200,255,0.7);
   }
+
+  /* ══ DEV CONSOLE ══ */
+  #devConsole {
+    position:fixed; bottom:0; left:0; right:0; z-index:9999;
+    transform:translateY(100%);
+    transition:transform 0.25s cubic-bezier(0.22,1,0.36,1);
+    font-family:'Courier New',monospace;
+  }
+  #devConsole.open { transform:translateY(0); }
+  #devConsoleBar {
+    display:flex; align-items:center; gap:10px;
+    background:rgba(0,0,0,0.93);
+    border-top:2px solid rgba(0,255,120,0.45);
+    padding:10px 16px;
+    box-shadow:0 -4px 30px rgba(0,255,100,0.18);
+  }
+  #devConsolePrompt {
+    color:#00ff88; font-size:15px; flex-shrink:0;
+    text-shadow:0 0 8px rgba(0,255,120,0.8);
+    animation:promptBlink 1.2s step-end infinite;
+  }
+  @keyframes promptBlink{0%,100%{opacity:1}50%{opacity:0.25}}
+  #devConsoleInput {
+    flex:1; background:transparent; border:none; outline:none;
+    color:#00ff88; font-family:'Courier New',monospace;
+    font-size:15px; letter-spacing:2px; caret-color:#00ff88;
+  }
+  #devConsoleInput::placeholder{color:rgba(0,255,120,0.22);letter-spacing:1px;}
+  #devConsoleClose {
+    color:rgba(0,255,120,0.35); font-size:16px; cursor:pointer;
+    flex-shrink:0; transition:color .15s; padding:2px 6px;
+    border:1px solid rgba(0,255,120,0.2); border-radius:3px;
+  }
+  #devConsoleClose:hover{color:#00ff88;border-color:rgba(0,255,120,0.5);}
+  #devConsoleOutput {
+    background:rgba(0,0,0,0.9);
+    border-top:1px solid rgba(0,255,120,0.1);
+    max-height:0; overflow:hidden;
+    transition:max-height 0.2s ease, padding 0.2s ease;
+    padding:0 16px;
+  }
+  #devConsoleOutput.has-output{max-height:130px;padding:8px 16px;overflow-y:auto;}
+  .dev-line{font-size:13px;letter-spacing:1px;padding:3px 0;border-bottom:1px solid rgba(0,255,120,0.06);display:flex;gap:10px;align-items:baseline;}
+  .dev-line:last-child{border-bottom:none;}
+  .dev-tag{font-size:10px;letter-spacing:2px;padding:1px 6px;border-radius:2px;flex-shrink:0;text-transform:uppercase;}
+  .dev-ok{color:#00ff88;} .dev-ok .dev-tag{background:rgba(0,255,120,0.1);color:#00ff88;border:1px solid rgba(0,255,120,0.3);}
+  .dev-err{color:#ff5555;} .dev-err .dev-tag{background:rgba(255,60,60,0.1);color:#ff6666;border:1px solid rgba(255,60,60,0.3);}
+  .dev-info{color:#88aaff;} .dev-info .dev-tag{background:rgba(100,150,255,0.1);color:#aabbff;border:1px solid rgba(100,150,255,0.3);}
+
+  /* ══ MULTIPLAYER CARD ══ */
+  #multiCard { background:#00080d; border:2px solid #004433; box-shadow:0 0 20px rgba(0,220,150,0.12); }
+  #multiCard:hover{box-shadow:0 0 40px rgba(0,255,180,0.3);border-color:#007755;}
+  #multiCard .card-name{color:#00ffaa;}
+  #multiCard .card-desc{color:#224433;}
+  #multiCard .card-tag{background:rgba(0,220,150,0.1);color:#00aa77;border:1px solid #003322;animation:multiTagPulse 2s ease-in-out infinite;}
+  @keyframes multiTagPulse{0%,100%{box-shadow:none}50%{box-shadow:0 0 10px rgba(0,220,150,0.35)}}
+  #mpScreen {
+    background:linear-gradient(160deg,#000a08 0%,#001a12 50%,#000d18 100%);
+    overflow:hidden;
+  }
+  #mpScreen::after {
+    content:'';position:absolute;inset:0;pointer-events:none;z-index:2;
+    background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.07) 3px,rgba(0,0,0,0.07) 4px);
+  }
+  .mp-bg-glow {
+    position:absolute;width:600px;height:600px;border-radius:50%;
+    background:radial-gradient(circle,rgba(0,180,100,0.12) 0%,transparent 70%);
+    top:50%;left:50%;transform:translate(-50%,-50%);
+    animation:pulseGlow 3s ease-in-out infinite;pointer-events:none;
+  }
+  .mp-inner {
+    position:relative;z-index:3;
+    display:flex;flex-direction:column;align-items:center;
+    width:min(500px,92vw);
+  }
+  .mp-heading {
+    font-family:'Creepster',monospace;font-size:clamp(28px,8vw,56px);
+    color:#00ffaa;letter-spacing:10px;text-transform:uppercase;
+    text-shadow:0 0 20px #00ffaa,0 0 50px rgba(0,255,150,0.4);
+    margin-bottom:6px;
+  }
+  .mp-sub {color:rgba(0,220,130,0.4);font-size:clamp(9px,2vw,12px);letter-spacing:5px;margin-bottom:40px;}
+  .mp-role-row {display:flex;gap:20px;flex-wrap:wrap;justify-content:center;width:100%;}
+  .mp-role-btn {
+    flex:1;min-width:160px;max-width:200px;padding:28px 16px;cursor:pointer;
+    background:rgba(0,255,150,0.04);border:2px solid rgba(0,200,120,0.2);
+    border-radius:8px;display:flex;flex-direction:column;align-items:center;gap:10px;
+    transition:all .15s;
+  }
+  .mp-role-btn:hover{background:rgba(0,255,150,0.1);border-color:rgba(0,255,150,0.5);transform:translateY(-4px);box-shadow:0 0 30px rgba(0,255,150,0.2);}
+  .mp-role-icon{font-size:clamp(36px,9vw,54px);line-height:1;}
+  .mp-role-name{font-family:'Creepster',monospace;font-size:clamp(20px,5vw,30px);color:#00ffaa;letter-spacing:4px;}
+  .mp-role-desc{font-size:clamp(9px,2vw,11px);color:rgba(0,200,120,0.5);letter-spacing:3px;text-align:center;}
+  .mp-lobby{width:100%;display:flex;flex-direction:column;align-items:center;gap:14px;}
+  .mp-lobby-label{font-size:clamp(9px,2vw,11px);letter-spacing:6px;color:rgba(0,200,120,0.4);text-transform:uppercase;}
+  .mp-code {
+    font-family:'Creepster',monospace;font-size:clamp(52px,14vw,90px);
+    color:#00ffaa;letter-spacing:16px;
+    text-shadow:0 0 30px rgba(0,255,150,0.6),0 0 60px rgba(0,255,150,0.3);
+    animation:codeGlow 2s ease-in-out infinite;
+  }
+  @keyframes codeGlow{0%,100%{text-shadow:0 0 30px rgba(0,255,150,0.6),0 0 60px rgba(0,255,150,0.3);}50%{text-shadow:0 0 50px rgba(0,255,150,0.9),0 0 100px rgba(0,255,150,0.5);}}
+  .mp-lobby-hint{color:rgba(0,180,100,0.35);font-size:clamp(9px,2vw,11px);letter-spacing:3px;}
+  .mp-status-row{display:flex;align-items:center;gap:10px;margin-top:6px;}
+  .mp-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+  .mp-dot-waiting{background:#ffaa00;animation:dotPulse 1s ease-in-out infinite;}
+  .mp-dot-connected{background:#00ff88;}
+  @keyframes dotPulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(0.7);}}
+  #mpStatusText,#mpJoinText{color:rgba(0,200,120,0.6);font-size:clamp(10px,2.5vw,13px);letter-spacing:3px;}
+  .mp-code-input-row{display:flex;gap:12px;align-items:center;}
+  .mp-code-input{
+    width:130px;padding:14px 10px;text-align:center;
+    background:rgba(0,255,150,0.05);border:2px solid rgba(0,200,120,0.3);
+    border-radius:6px;outline:none;
+    font-family:'Creepster',monospace;font-size:36px;color:#00ffaa;
+    letter-spacing:10px;caret-color:#00ffaa;
+  }
+  .mp-code-input::placeholder{color:rgba(0,200,100,0.2);}
+  .mp-code-input:focus{border-color:rgba(0,255,150,0.6);box-shadow:0 0 20px rgba(0,255,150,0.15);}
+  .mp-connect-btn{
+    padding:14px 24px;
+    background:linear-gradient(135deg,#00aa66,#00cc88);
+    color:#000;font-family:'Special Elite',monospace;font-size:clamp(11px,2.5vw,14px);
+    font-weight:700;letter-spacing:5px;text-transform:uppercase;
+    border:none;cursor:pointer;border-radius:6px;
+    box-shadow:0 4px 20px rgba(0,200,120,0.4);transition:all .15s;
+  }
+  .mp-connect-btn:hover{background:linear-gradient(135deg,#00cc77,#00ffaa);transform:translateY(-2px);}
+  #mpRoleHUD{
+    position:fixed;top:16px;right:16px;
+    display:none;align-items:center;gap:8px;z-index:50;
+    background:rgba(0,0,0,0.5);border:1px solid rgba(0,200,120,0.4);
+    border-radius:20px;padding:6px 16px;
+    font-family:'Special Elite',monospace;font-size:13px;
+    color:#00ffaa;letter-spacing:3px;
+    text-shadow:0 0 8px rgba(0,255,150,0.6);
+  }
+
 </style>
+<script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 </head>
 <body>
 <canvas id="gameCanvas"></canvas>
@@ -503,6 +758,7 @@
     <div class="home-btns">
       <button class="btn-play" id="playBtn">▶ &nbsp; Play</button>
       <button class="btn-shop" id="shopBtn">🛍 &nbsp; Shop</button>
+      <button class="btn-versions" id="versionsBtn">🕹 &nbsp; Old Versions</button>
       <button class="btn-notes" id="notesBtn">📋 &nbsp; Update Notes</button>
     </div>
   </div>
@@ -534,11 +790,25 @@
   </div>
 </div>
 
+<!-- ══ VERSION SELECT ══ -->
+<div id="versionScreen" class="screen">
+  <div class="ver-blob ver-blob-1"></div>
+  <div class="ver-blob ver-blob-2"></div>
+  <div class="ver-blob ver-blob-3"></div>
+  <button class="back-btn" id="verBackBtn">← Back</button>
+  <div class="ver-inner">
+    <p class="ver-heading">Select Version</p>
+    <p class="ver-sub">Travel back in time</p>
+    <div class="ver-scroll">
+      <div class="ver-list" id="verList"></div>
+    </div>
+  </div>
+</div>
+
 <!-- ══ MODE SELECT ══ -->
 <div id="modeScreen" class="screen">
   <div class="mode-bg-glow"></div>
   <button class="back-btn" id="backBtn">← Back</button>
-  <p class="mode-heading">Select Mode</p>
   <p class="mode-sub">Choose your fate</p>
   <div class="mode-cards">
     <button class="mode-card" id="normalCard">
@@ -559,6 +829,61 @@
       <span class="card-desc">How fast can you<br>find the exit?</span>
       <span class="card-tag">⚡ Race the clock</span>
     </button>
+    <button class="mode-card" id="multiCard">
+      <span class="card-icon">👥</span>
+      <span class="card-name">Multiplayer</span>
+      <span class="card-desc">Host or join.<br>One of you is Rohan.</span>
+      <span class="card-tag">🌐 2 players</span>
+    </button>
+  </div>
+</div>
+
+
+<!-- ══ MULTIPLAYER LOBBY ══ -->
+<div id="mpScreen" class="screen">
+  <div class="mp-bg-glow"></div>
+  <button class="back-btn" id="mpBackBtn">← Back</button>
+  <div class="mp-inner">
+    <p class="mp-heading">Multiplayer</p>
+    <p class="mp-sub" id="mpSub">Choose your role</p>
+
+    <!-- Role picker -->
+    <div id="mpRolePicker" class="mp-role-row">
+      <button class="mp-role-btn" id="mpHostBtn">
+        <span class="mp-role-icon">🩺</span>
+        <span class="mp-role-name">Host</span>
+        <span class="mp-role-desc">You play as Dr Rohan</span>
+      </button>
+      <button class="mp-role-btn" id="mpJoinBtn">
+        <span class="mp-role-icon">🏃</span>
+        <span class="mp-role-name">Join</span>
+        <span class="mp-role-desc">You play as the runner</span>
+      </button>
+    </div>
+
+    <!-- Host lobby -->
+    <div id="mpHostLobby" class="mp-lobby" style="display:none;">
+      <p class="mp-lobby-label">YOUR CODE</p>
+      <p class="mp-code" id="mpCodeDisplay">····</p>
+      <p class="mp-lobby-hint">Share this code with your friend</p>
+      <div class="mp-status-row">
+        <span class="mp-dot mp-dot-waiting" id="mpStatusDot"></span>
+        <span id="mpStatusText">Waiting for player to join...</span>
+      </div>
+    </div>
+
+    <!-- Join lobby -->
+    <div id="mpJoinLobby" class="mp-lobby" style="display:none;">
+      <p class="mp-lobby-label">ENTER CODE</p>
+      <div class="mp-code-input-row">
+        <input id="mpCodeInput" class="mp-code-input" type="text" maxlength="4" placeholder="0000" autocomplete="off" inputmode="numeric"/>
+        <button class="mp-connect-btn" id="mpConnectBtn">Connect</button>
+      </div>
+      <div class="mp-status-row" id="mpJoinStatus" style="display:none;">
+        <span class="mp-dot mp-dot-waiting" id="mpJoinDot"></span>
+        <span id="mpJoinText">Connecting...</span>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -618,13 +943,38 @@
   <div class="notes-inner">
     <div class="notes-header">
       <span class="notes-title">Updates</span>
-      <span class="notes-version-badge">CURRENT: v1.2</span>
+      <span class="notes-version-badge">CURRENT: v1.23</span>
     </div>
     <div class="notes-scroll">
 
       <div class="version-block">
-        <div class="version-tag">v1.2</div>
+        <div class="version-tag">v1.23</div>
         <div class="version-date">LATEST</div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Multiplayer — host or join a game with a 4-digit code over two devices</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Host plays as Dr Rohan — chase the runner across the hospital in real time</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Guest plays as the runner — find the exit before Dr Rohan catches you</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">WebRTC peer-to-peer connection — no server needed, just share the code</span></div>
+      </div>
+
+      <div class="version-block">
+        <div class="version-tag">v1.22</div>
+        <div class="version-date">—</div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Dev console — type <em>rowhanio</em> anywhere to open a secret cheat terminal</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">givecoins &lt;n&gt; — adds coins directly to your shop balance</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">killhan — eliminates Dr Rohan mid-game so you can roam freely</span></div>
+      </div>
+
+      <div class="version-block">
+        <div class="version-tag">v1.21</div>
+        <div class="version-date">—</div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Old Versions — browse and play every version of the game from the home screen</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Version select screen — each version shows its feature pills so you know what to expect</span></div>
+        <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Mode select respects the chosen version — older versions only show modes they had</span></div>
+      </div>
+
+      <div class="version-block">
+        <div class="version-tag">v1.2</div>
+        <div class="version-date">—</div>
         <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Shop — browse and equip cosmetics from the home screen</span></div>
         <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">4 categories — Hats, Shirts, Pants and Shoes, each with 5 items</span></div>
         <div class="update-entry"><span class="update-tag tag-new">NEW</span><span class="update-text">Some items are free, others cost coins — spend what you earn in-game</span></div>
@@ -725,6 +1075,17 @@
 <div id="hcBadge">⚠ HARDCORE</div>
 <div id="coinHUD"><span class="coin-icon">🪙</span><span id="coinCount">0</span></div>
 <div id="timerHUD">⏱ <span id="timerDisplay">0.00</span></div>
+<div id="mpRoleHUD"></div>
+
+<!-- DEV CONSOLE -->
+<div id="devConsole">
+  <div id="devConsoleBar">
+    <span id="devConsolePrompt">▶</span>
+    <input id="devConsoleInput" type="text" autocomplete="off" spellcheck="false" placeholder="enter cheat code..."/>
+    <span id="devConsoleClose">✕</span>
+  </div>
+  <div id="devConsoleOutput"></div>
+</div>
 
 <script>
 const canvas=document.getElementById('gameCanvas'),ctx=canvas.getContext('2d');
@@ -756,6 +1117,7 @@ if(isMobile){document.getElementById('joystick-zone').style.display='block';docu
 function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));if(id)document.getElementById(id).classList.add('active');}
 
 let hardcoreMode=false, timedMode=false;
+let rohanDead=false;
 let gameState='home',animFrame;
 const TILE=48,MAP_W=30,MAP_H=20;
 const rawMap=[
@@ -795,35 +1157,34 @@ function initGame(){
   stamina=100;axeSwing=0;spookFactor=0;gingerPath=[];pathTimer=0;cutsceneTimer=0;cutscenePhase=0;camX=0;camY=0;
   coinsCollected=0; timerStart=Date.now(); elapsedTime=0;
   document.getElementById('coinCount').textContent='0';
-  // Spawn exit on a random edge tile that has floor behind it (not a wall)
-  var exitCandidates=[];
-  var tx,ty;
-  // Top edge (ty=0): check tile below is floor
-  for(tx=1;tx<MAP_W-1;tx++){if(rawMap[1][tx]===0)exitCandidates.push({tx:tx,ty:0,side:'top'});}
-  // Bottom edge (ty=MAP_H-1): check tile above is floor
-  for(tx=1;tx<MAP_W-1;tx++){if(rawMap[MAP_H-2][tx]===0)exitCandidates.push({tx:tx,ty:MAP_H-1,side:'bottom'});}
-  // Left edge (tx=0): check tile to right is floor
-  for(ty=1;ty<MAP_H-1;ty++){if(rawMap[ty][1]===0)exitCandidates.push({tx:0,ty:ty,side:'left'});}
-  // Right edge (tx=MAP_W-1): check tile to left is floor
-  for(ty=1;ty<MAP_H-1;ty++){if(rawMap[ty][MAP_W-2]===0)exitCandidates.push({tx:MAP_W-1,ty:ty,side:'right'});}
-  // Pick random candidate, away from player start corner
-  var filtered=exitCandidates.filter(function(e){return Math.hypot(e.tx-2,e.ty-2)>6;});
-  if(filtered.length===0)filtered=exitCandidates;
-  exitTile=filtered[Math.floor(Math.random()*filtered.length)];
+  // Exit door
+  exitTile={tx:0,ty:0,side:'top'};
+  if(selectedVersion.hasExit){
+    var exitCandidates=[];
+    var tx,ty;
+    for(tx=1;tx<MAP_W-1;tx++){if(rawMap[1][tx]===0)exitCandidates.push({tx:tx,ty:0,side:'top'});}
+    for(tx=1;tx<MAP_W-1;tx++){if(rawMap[MAP_H-2][tx]===0)exitCandidates.push({tx:tx,ty:MAP_H-1,side:'bottom'});}
+    for(ty=1;ty<MAP_H-1;ty++){if(rawMap[ty][1]===0)exitCandidates.push({tx:0,ty:ty,side:'left'});}
+    for(ty=1;ty<MAP_H-1;ty++){if(rawMap[ty][MAP_W-2]===0)exitCandidates.push({tx:MAP_W-1,ty:ty,side:'right'});}
+    var filtered=exitCandidates.filter(function(e){return Math.hypot(e.tx-2,e.ty-2)>6;});
+    if(filtered.length===0)filtered=exitCandidates;
+    exitTile=filtered[Math.floor(Math.random()*filtered.length)];
+  }
+  // Coins
   coins=[];
-  const numCoins=10+Math.floor(Math.random()*5);
-  let attempts=0;
-  while(coins.length<numCoins&&attempts<500){
-    attempts++;
-    const tx=1+Math.floor(Math.random()*(MAP_W-2));
-    const ty=1+Math.floor(Math.random()*(MAP_H-2));
-    if(isWall(tx,ty))continue;
-    const cx=(tx+0.5)*TILE, cy=(ty+0.5)*TILE;
-    // Keep away from player start
-    if(Math.hypot(cx-2.5*TILE,cy-2.5*TILE)<3*TILE)continue;
-    // No duplicate tiles
-    if(coins.some(c=>Math.abs(c.x-cx)<TILE&&Math.abs(c.y-cy)<TILE))continue;
-    coins.push({x:cx,y:cy,collected:false});
+  if(selectedVersion.hasCoins){
+    const numCoins=10+Math.floor(Math.random()*5);
+    let attempts=0;
+    while(coins.length<numCoins&&attempts<500){
+      attempts++;
+      const tx=1+Math.floor(Math.random()*(MAP_W-2));
+      const ty=1+Math.floor(Math.random()*(MAP_H-2));
+      if(isWall(tx,ty))continue;
+      const cx=(tx+0.5)*TILE, cy=(ty+0.5)*TILE;
+      if(Math.hypot(cx-2.5*TILE,cy-2.5*TILE)<3*TILE)continue;
+      if(coins.some(c=>Math.abs(c.x-cx)<TILE&&Math.abs(c.y-cy)<TILE))continue;
+      coins.push({x:cx,y:cy,collected:false});
+    }
   }
 }
 
@@ -947,24 +1308,27 @@ function drawPlayer(px,py,facing){
 
 function drawGinger(gx,gy,facing,syringeAngle){
   const x=gx-camX,y=gy-camY;ctx.save();ctx.translate(x,y);if(facing<0)ctx.scale(-1,1);
-  // Danger zone ring — drawn first so it's behind the character
-  const t=Date.now();
-  const ringPulse=0.3+0.25*Math.abs(Math.sin(t*0.004));
-  const ringColor=hardcoreMode?`rgba(200,0,255,${ringPulse})`:`rgba(220,0,0,${ringPulse})`;
-  const innerColor=hardcoreMode?`rgba(180,0,255,0.06)`:`rgba(200,0,0,0.06)`;
-  // Filled inner glow
-  const rg=ctx.createRadialGradient(0,0,GINGER_R,0,0,KILL_RADIUS);
-  rg.addColorStop(0,innerColor);
-  rg.addColorStop(1,'rgba(0,0,0,0)');
-  ctx.fillStyle=rg;ctx.beginPath();ctx.arc(0,0,KILL_RADIUS,0,Math.PI*2);ctx.fill();
-  // Pulsing outer ring
-  ctx.strokeStyle=ringColor;ctx.lineWidth=2;
-  ctx.setLineDash([10,6]);ctx.lineDashOffset=-(t*0.04)%16;
-  ctx.beginPath();ctx.arc(0,0,KILL_RADIUS,0,Math.PI*2);ctx.stroke();
-  ctx.setLineDash([]);
-  ctx.restore();
-  // Now draw the character (separate save/restore so ring isn't flipped)
-  ctx.save();ctx.translate(x,y);if(facing<0)ctx.scale(-1,1);
+  // Danger zone ring — only in versions with kill radius
+  if(selectedVersion.hasKillRadius){
+    const t=Date.now();
+    const ringPulse=0.3+0.25*Math.abs(Math.sin(t*0.004));
+    const ringColor=hardcoreMode?`rgba(200,0,255,${ringPulse})`:`rgba(220,0,0,${ringPulse})`;
+    const innerColor=hardcoreMode?`rgba(180,0,255,0.06)`:`rgba(200,0,0,0.06)`;
+    const rg=ctx.createRadialGradient(0,0,GINGER_R,0,0,KILL_RADIUS);
+    rg.addColorStop(0,innerColor);rg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=rg;ctx.beginPath();ctx.arc(0,0,KILL_RADIUS,0,Math.PI*2);ctx.fill();
+    // Pulsing outer ring
+    ctx.strokeStyle=ringColor;ctx.lineWidth=2;
+    ctx.setLineDash([10,6]);ctx.lineDashOffset=-(t*0.04)%16;
+    ctx.beginPath();ctx.arc(0,0,KILL_RADIUS,0,Math.PI*2);ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+    // Now draw the character (separate save/restore so ring isn't flipped)
+    ctx.save();ctx.translate(x,y);if(facing<0)ctx.scale(-1,1);
+  } else {
+    // No kill radius — just set up the character save
+    ctx.save();ctx.translate(x,y);if(facing<0)ctx.scale(-1,1);
+  }
   // shadow
   ctx.fillStyle='rgba(0,0,0,.5)';drawEllipse(ctx,0,14,16,6);ctx.fill();
   // white doctor coat (body)
@@ -1078,13 +1442,14 @@ function drawCutscene(){
 }
 
 function moveGinger(){
+  if(rohanDead) return;
   pathTimer++;if(pathTimer>=24||gingerPath.length===0){pathTimer=0;gingerPath=bfs(ginger.x,ginger.y,player.x,player.y);}
   if(gingerPath.length>0){const t=gingerPath[0],dx=t.x-ginger.x,dy=t.y-ginger.y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<4){gingerPath.shift();}else{const s=ginger.speed,nx=ginger.x+(dx/dist)*s,ny=ginger.y+(dy/dist)*s;if(!collidesWithWall(nx,ginger.y,GINGER_R-2))ginger.x=nx;if(!collidesWithWall(ginger.x,ny,GINGER_R-2))ginger.y=ny;ginger.facing=dx>0?1:-1;}}
 }
 
-function update(){
+function _updateSolo(){
   if(gameState!=='playing')return;
-  const sprinting=(keys['Shift']||sprintPressed)&&stamina>0;
+  const sprinting=selectedVersion.hasSprint&&(keys['Shift']||sprintPressed)&&stamina>0;
   stamina=sprinting?Math.max(0,stamina-.8):Math.min(100,stamina+.3);
   document.getElementById('stamina-fill').style.width=stamina+'%';
   const spd=sprinting?5.5:3.2;let dx=0,dy=0;
@@ -1095,16 +1460,15 @@ function update(){
   if(!collidesWithWall(nx,player.y,PLAYER_R))player.x=nx;if(!collidesWithWall(player.x,ny,PLAYER_R))player.y=ny;
   moveGinger();
   // Coin collection
-  for(const c of coins){
-    if(c.collected)continue;
-    if(Math.hypot(player.x-c.x,player.y-c.y)<PLAYER_R+COIN_R){
-      c.collected=true;
-      coinsCollected++;
-      const hud=document.getElementById('coinHUD');
-      document.getElementById('coinCount').textContent=coinsCollected;
-      hud.classList.remove('popped');
-      void hud.offsetWidth; // reflow to restart animation
-      hud.classList.add('popped');
+  if(selectedVersion.hasCoins){
+    for(const c of coins){
+      if(c.collected)continue;
+      if(Math.hypot(player.x-c.x,player.y-c.y)<PLAYER_R+COIN_R){
+        c.collected=true; coinsCollected++;
+        const hud=document.getElementById('coinHUD');
+        document.getElementById('coinCount').textContent=coinsCollected;
+        hud.classList.remove('popped'); void hud.offsetWidth; hud.classList.add('popped');
+      }
     }
   }
   if(timedMode){
@@ -1113,24 +1477,28 @@ function update(){
   }
   const dist=Math.hypot(player.x-ginger.x,player.y-ginger.y);
   axeSwing=dist<200?Math.sin(Date.now()*.012)*.5+Math.sin(Date.now()*.007)*.3:Math.sin(Date.now()*.003)*.15;
-  spookFactor=Math.max(0,1-dist/(KILL_RADIUS*3.5));
+  spookFactor=selectedVersion.hasSpookFx?Math.max(0,1-dist/(KILL_RADIUS*3.5)):0;
   camX=Math.max(0,Math.min(MAP_W*TILE-W,player.x-W/2));camY=Math.max(0,Math.min(MAP_H*TILE-H,player.y-H/2));
-  if(dist<KILL_RADIUS){gameState='cutscene';cutsceneTimer=0;cutscenePhase=0;}
+  // Catch detection — kill radius or contact
+  const catchDist = selectedVersion.hasKillRadius ? KILL_RADIUS : PLAYER_R+GINGER_R;
+  if(dist<catchDist){gameState='cutscene';cutsceneTimer=0;cutscenePhase=0;}
   // Exit detection
-  var ex=(exitTile.tx+0.5)*TILE, ey=(exitTile.ty+0.5)*TILE;
-  if(Math.hypot(player.x-ex,player.y-ey)<PLAYER_R+TILE*0.55){
-    gameState='escaped';
-    elapsedTime=(Date.now()-timerStart)/1000;
-    shopEarnCoins(coinsCollected); // coins carry over to shop balance
-    var tLabel=document.getElementById('escapeTimeLabel');
-    if(timedMode){
-      tLabel.textContent='⏱ YOUR TIME: '+elapsedTime.toFixed(2)+'s';tLabel.style.display='block';
-      document.getElementById('escapeCoinLabel').textContent='🪙 COINS COLLECTED: '+coinsCollected;
-      lbShowAfterRun(elapsedTime);
-    } else {
-      tLabel.style.display='none';
-      document.getElementById('escapeCoinLabel').textContent='🪙 COINS COLLECTED: '+coinsCollected;
-      showScreen('escapeScreen');
+  if(selectedVersion.hasExit){
+    var ex=(exitTile.tx+0.5)*TILE, ey=(exitTile.ty+0.5)*TILE;
+    if(Math.hypot(player.x-ex,player.y-ey)<PLAYER_R+TILE*0.55){
+      gameState='escaped';
+      elapsedTime=(Date.now()-timerStart)/1000;
+      if(selectedVersion.hasShop) shopEarnCoins(coinsCollected);
+      var tLabel=document.getElementById('escapeTimeLabel');
+      if(timedMode){
+        tLabel.textContent='⏱ YOUR TIME: '+elapsedTime.toFixed(2)+'s';tLabel.style.display='block';
+        document.getElementById('escapeCoinLabel').textContent=selectedVersion.hasCoins?'🪙 COINS COLLECTED: '+coinsCollected:'';
+        lbShowAfterRun(elapsedTime);
+      } else {
+        tLabel.style.display='none';
+        document.getElementById('escapeCoinLabel').textContent=selectedVersion.hasCoins?'🪙 COINS COLLECTED: '+coinsCollected:'';
+        showScreen('escapeScreen');
+      }
     }
   }
 }
@@ -1139,29 +1507,37 @@ function draw(){
   ctx.clearRect(0,0,W,H);
   if(gameState==='playing'){
     drawFloor();
-    drawCoins();
-    drawExit();
-    if(spookFactor>0){const g=ctx.createRadialGradient(W/2,H/2,H*.2,W/2,H/2,H),c=hardcoreMode?'120,40,0':'80,0,0';g.addColorStop(0,`rgba(${c},0)`);g.addColorStop(1,`rgba(${c},${spookFactor*.65})`);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);}
-    drawGinger(ginger.x,ginger.y,ginger.facing,axeSwing);drawPlayer(player.x,player.y,player.facing);
+    if(selectedVersion.hasCoins) drawCoins();
+    if(selectedVersion.hasExit) drawExit();
+    if(selectedVersion.hasSpookFx&&spookFactor>0){const g=ctx.createRadialGradient(W/2,H/2,H*.2,W/2,H/2,H),c=hardcoreMode?'120,40,0':'80,0,0';g.addColorStop(0,`rgba(${c},0)`);g.addColorStop(1,`rgba(${c},${spookFactor*.65})`);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);}
+    drawGinger(ginger.x,ginger.y,ginger.facing,axeSwing);
+    drawPlayer(player.x,player.y,player.facing);
     const vg=ctx.createRadialGradient(W/2,H/2,H*.35,W/2,H/2,H*.85);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.7)');ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
-    if(spookFactor>.4){const hb=Math.abs(Math.sin(Date.now()*(hardcoreMode?.01:.006)))*spookFactor*(hardcoreMode?.4:.25);ctx.fillStyle=hardcoreMode?`rgba(200,80,0,${hb})`:`rgba(180,0,0,${hb})`;ctx.fillRect(0,0,W,H);}
+    if(selectedVersion.hasSpookFx&&spookFactor>.4){const hb=Math.abs(Math.sin(Date.now()*(hardcoreMode?.01:.006)))*spookFactor*(hardcoreMode?.4:.25);ctx.fillStyle=hardcoreMode?`rgba(200,80,0,${hb})`:`rgba(180,0,0,${hb})`;ctx.fillRect(0,0,W,H);}
   } else if(gameState==='cutscene'){
-    drawCutscene();cutsceneTimer++;
-    if(cutsceneTimer>=60)cutscenePhase=1;if(cutsceneTimer>=100)cutscenePhase=2;if(cutsceneTimer>=200)cutscenePhase=3;
-    if(cutsceneTimer>=240){gameState='dead';showScreen('deathScreen');document.getElementById('deathModeLabel').style.display=hardcoreMode?'block':'none';}
+    if(selectedVersion.hasCutscene){
+      drawCutscene();cutsceneTimer++;
+      if(cutsceneTimer>=60)cutscenePhase=1;if(cutsceneTimer>=100)cutscenePhase=2;if(cutsceneTimer>=200)cutscenePhase=3;
+      if(cutsceneTimer>=240){gameState='dead';showScreen('deathScreen');document.getElementById('deathModeLabel').style.display=hardcoreMode?'block':'none';}
+    } else {
+      // No cutscene — go straight to death
+      gameState='dead';showScreen('deathScreen');document.getElementById('deathModeLabel').style.display='none';
+    }
   }
 }
 
 function loop(){update();draw();animFrame=requestAnimationFrame(loop);}
 
 async function startGame(hc,timed){
-  hardcoreMode=hc; timedMode=timed||false;
-  await shopLoadState();
-  initGame();gameState='playing';
+  hardcoreMode = hc && selectedVersion.hasHardcore;
+  timedMode = (timed||false) && selectedVersion.hasTimed;
+  rohanDead = false;
+  if(selectedVersion.hasShop) await shopLoadState();
+  initGame(); gameState='playing';
   showScreen(null);
-  document.getElementById('hcBadge').style.display=hc?'block':'none';
-  document.getElementById('coinHUD').style.display='flex';
-  document.getElementById('timerHUD').style.display=timed?'flex':'none';
+  document.getElementById('hcBadge').style.display=hardcoreMode?'block':'none';
+  document.getElementById('coinHUD').style.display=selectedVersion.hasCoins?'flex':'none';
+  document.getElementById('timerHUD').style.display=timedMode?'flex':'none';
   if(animFrame)cancelAnimationFrame(animFrame);loop();
 }
 function goHome(){
@@ -1448,10 +1824,176 @@ document.querySelectorAll('.shop-tab').forEach(tab=>{
 });
 
 
-document.getElementById('playBtn').addEventListener('click',()=>showScreen('modeScreen'));
+// ══ VERSION SYSTEM ══
+const VERSIONS = [
+  {
+    id:'v1.23', label:'Multiplayer',
+    pills:['Coins','Exit','Kill Radius','Sprint','Cutscene','Shop','Hardcore','Timed','Leaderboard','Multiplayer','Dev Console'],
+    hasCoins:true, hasExit:true, hasKillRadius:true, hasSprint:true, hasCutscene:true,
+    hasShop:true, hasHardcore:true, hasTimed:true, hasSpookFx:true,
+  },
+  {
+    id:'v1.22', label:'Dev console & cheat codes',
+    pills:['Coins','Exit','Kill Radius','Sprint','Cutscene','Shop','Hardcore','Timed','Leaderboard','Dev Console'],
+    hasCoins:true, hasExit:true, hasKillRadius:true, hasSprint:true, hasCutscene:true,
+    hasShop:true, hasHardcore:true, hasTimed:true, hasSpookFx:true,
+  },
+  {
+    id:'v1.21', label:'Old versions selector',
+    pills:['Coins','Exit','Kill Radius','Sprint','Cutscene','Shop','Hardcore','Timed','Leaderboard'],
+    hasCoins:true, hasExit:true, hasKillRadius:true, hasSprint:true, hasCutscene:true,
+    hasShop:true, hasHardcore:true, hasTimed:true, hasSpookFx:true,
+  },
+  {
+    id:'v1.2', label:'Shop system',
+    pills:['Coins','Exit','Kill Radius','Sprint','Cutscene','Shop','Hardcore','Timed','Leaderboard'],
+    hasCoins:true, hasExit:true, hasKillRadius:true, hasSprint:true, hasCutscene:true,
+    hasShop:true, hasHardcore:true, hasTimed:true, hasSpookFx:true,
+  },
+  {
+    id:'v1.19', label:'Leaderboard update',
+    pills:['Coins','Exit','Kill Radius','Sprint','Cutscene','Hardcore','Timed','Leaderboard'],
+    hasCoins:true, hasExit:true, hasKillRadius:true, hasSprint:true, hasCutscene:true,
+    hasShop:false, hasHardcore:true, hasTimed:true, hasSpookFx:true,
+  },
+  {
+    id:'v1.18', label:'Timed Mode added',
+    pills:['Coins','Exit','Kill Radius','Sprint','Cutscene','Hardcore','Timed'],
+    hasCoins:true, hasExit:true, hasKillRadius:true, hasSprint:true, hasCutscene:true,
+    hasShop:false, hasHardcore:true, hasTimed:true, hasSpookFx:true,
+  },
+  {
+    id:'v1.17', label:'Kill radius & danger ring',
+    pills:['Coins','Exit','Kill Radius','Sprint','Cutscene','Hardcore'],
+    hasCoins:true, hasExit:true, hasKillRadius:true, hasSprint:true, hasCutscene:true,
+    hasShop:false, hasHardcore:true, hasTimed:false, hasSpookFx:true,
+  },
+  {
+    id:'v1.16', label:'Exit door added',
+    pills:['Coins','Exit','Sprint','Cutscene','Hardcore'],
+    hasCoins:true, hasExit:true, hasKillRadius:false, hasSprint:true, hasCutscene:true,
+    hasShop:false, hasHardcore:true, hasTimed:false, hasSpookFx:true,
+  },
+  {
+    id:'v1.15', label:'Coins added',
+    pills:['Coins','Sprint','Cutscene','Hardcore'],
+    hasCoins:true, hasExit:false, hasKillRadius:false, hasSprint:true, hasCutscene:true,
+    hasShop:false, hasHardcore:true, hasTimed:false, hasSpookFx:true,
+  },
+  {
+    id:'v1.14', label:'Dr Rohan redesign',
+    pills:['Sprint','Cutscene','Hardcore'],
+    hasCoins:false, hasExit:false, hasKillRadius:false, hasSprint:true, hasCutscene:true,
+    hasShop:false, hasHardcore:true, hasTimed:false, hasSpookFx:true,
+  },
+  {
+    id:'v1.13', label:'Update Notes screen',
+    pills:['Sprint','Cutscene','Hardcore'],
+    hasCoins:false, hasExit:false, hasKillRadius:false, hasSprint:true, hasCutscene:true,
+    hasShop:false, hasHardcore:true, hasTimed:false, hasSpookFx:true,
+  },
+  {
+    id:'v1.12', label:'Mode select screen',
+    pills:['Sprint','Cutscene','Hardcore'],
+    hasCoins:false, hasExit:false, hasKillRadius:false, hasSprint:true, hasCutscene:true,
+    hasShop:false, hasHardcore:true, hasTimed:false, hasSpookFx:true,
+  },
+  {
+    id:'v1.11', label:'Hardcore Mode added',
+    pills:['Sprint','Cutscene','Hardcore'],
+    hasCoins:false, hasExit:false, hasKillRadius:false, hasSprint:true, hasCutscene:true,
+    hasShop:false, hasHardcore:true, hasTimed:false, hasSpookFx:true,
+  },
+  {
+    id:'v1.1', label:'Initial release',
+    pills:['Sprint','Cutscene'],
+    hasCoins:false, hasExit:false, hasKillRadius:false, hasSprint:true, hasCutscene:true,
+    hasShop:false, hasHardcore:false, hasTimed:false, hasSpookFx:true,
+  },
+];
+
+// All known feature pill names
+const ALL_PILLS = ['Coins','Exit','Kill Radius','Sprint','Cutscene','Shop','Hardcore','Timed','Leaderboard','Multiplayer','Dev Console'];
+
+let selectedVersion = VERSIONS[0]; // default: latest
+
+function verRender(){
+  const list = document.getElementById('verList');
+  list.innerHTML = '';
+  VERSIONS.forEach((v,i) => {
+    const isCurrent = i === 0;
+    const card = document.createElement('button');
+    card.className = 'ver-card' + (isCurrent ? ' ver-current' : '');
+
+    const numEl = document.createElement('span');
+    numEl.className = 'ver-num';
+    numEl.textContent = v.id;
+
+    const infoEl = document.createElement('div');
+    infoEl.className = 'ver-info';
+
+    const labelEl = document.createElement('div');
+    labelEl.className = 'ver-label';
+    labelEl.textContent = v.label;
+    if(isCurrent){
+      const badge = document.createElement('span');
+      badge.className = 'ver-current-badge';
+      badge.textContent = 'Latest';
+      labelEl.appendChild(badge);
+    }
+
+    const pillsEl = document.createElement('div');
+    pillsEl.className = 'ver-pills';
+    ALL_PILLS.forEach(p => {
+      const pill = document.createElement('span');
+      pill.className = 'ver-pill ' + (v.pills.includes(p) ? 'pill-on' : 'pill-off');
+      pill.textContent = p;
+      pillsEl.appendChild(pill);
+    });
+
+    infoEl.appendChild(labelEl);
+    infoEl.appendChild(pillsEl);
+
+    const arrow = document.createElement('span');
+    arrow.className = 'ver-arrow';
+    arrow.textContent = '›';
+
+    card.appendChild(numEl);
+    card.appendChild(infoEl);
+    card.appendChild(arrow);
+
+    card.addEventListener('click', () => {
+      selectedVersion = v;
+      modeOrigin = 'versions';
+      // Hide hardcore/timed cards based on version features
+      document.getElementById('hardcoreCard').style.display = v.hasHardcore ? '' : 'none';
+      document.getElementById('timedCard').style.display = v.hasTimed ? '' : 'none';
+      showScreen('modeScreen');
+    });
+
+    list.appendChild(card);
+  });
+}
+
+// Track where mode select was reached from: 'home' or 'versions'
+let modeOrigin = 'home';
+
+document.getElementById('playBtn').addEventListener('click',()=>{
+  selectedVersion = VERSIONS[0]; // always latest
+  document.getElementById('hardcoreCard').style.display = '';
+  document.getElementById('timedCard').style.display = '';
+  modeOrigin = 'home';
+  showScreen('modeScreen');
+});
+document.getElementById('versionsBtn').addEventListener('click',()=>{ verRender(); showScreen('versionScreen'); });
+document.getElementById('verBackBtn').addEventListener('click',()=>showScreen('homeScreen'));
+document.getElementById('backBtn').addEventListener('click',()=>{
+  if(modeOrigin==='versions') showScreen('versionScreen');
+  else showScreen('homeScreen');
+});
+
 document.getElementById('notesBtn').addEventListener('click',()=>showScreen('notesScreen'));
 document.getElementById('notesBackBtn').addEventListener('click',()=>showScreen('homeScreen'));
-document.getElementById('backBtn').addEventListener('click',()=>showScreen('homeScreen'));
 document.getElementById('normalCard').addEventListener('click',()=>startGame(false,false));
 document.getElementById('hardcoreCard').addEventListener('click',()=>startGame(true,false));
 document.getElementById('timedCard').addEventListener('click',()=>startGame(false,true));
@@ -1535,6 +2077,422 @@ function drawHomeChar() {
   requestAnimationFrame(drawHomeChar);
 }
 drawHomeChar();
+
+// ══ DEV CONSOLE ══
+let devConsoleOpen = false;
+let rohanioBuffer = '';
+const KONAMI = 'rowhanio';
+
+const devEl     = document.getElementById('devConsole');
+const devInput  = document.getElementById('devConsoleInput');
+const devOutput = document.getElementById('devConsoleOutput');
+const devClose  = document.getElementById('devConsoleClose');
+
+function devLog(msg, type='ok'){
+  const line = document.createElement('div');
+  line.className = 'dev-line dev-' + type;
+  const tag = document.createElement('span');
+  tag.className = 'dev-tag';
+  tag.textContent = type === 'ok' ? 'OK' : type === 'err' ? 'ERR' : 'INFO';
+  const text = document.createElement('span');
+  text.textContent = msg;
+  line.appendChild(tag);
+  line.appendChild(text);
+  devOutput.appendChild(line);
+  devOutput.classList.add('has-output');
+  devOutput.scrollTop = devOutput.scrollHeight;
+}
+
+function devOpen(){
+  devConsoleOpen = true;
+  devEl.classList.add('open');
+  setTimeout(()=>devInput.focus(), 50);
+}
+
+function devClose_fn(){
+  devConsoleOpen = false;
+  devEl.classList.remove('open');
+  devInput.value = '';
+}
+
+devClose.addEventListener('click', devClose_fn);
+
+// Secret word listener — works on any screen
+let rohanioTimeout = null;
+window.addEventListener('keydown', e => {
+  // Let the dev console input handle its own typing
+  if(devConsoleOpen && e.key === 'Escape'){ devClose_fn(); return; }
+  if(devConsoleOpen) return;
+
+  // Don't trigger inside ANY input or textarea
+  const active = document.activeElement;
+  if(active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) return;
+
+  // Only single printable characters
+  if(e.key.length !== 1) return;
+
+  const ch = e.key.toLowerCase();
+  const next = rohanioBuffer + ch;
+
+  // Clear any pending timeout
+  if(rohanioTimeout) clearTimeout(rohanioTimeout);
+
+  if(KONAMI.startsWith(next)){
+    rohanioBuffer = next;
+    if(rohanioBuffer === KONAMI){ devOpen(); rohanioBuffer = ''; return; }
+    // Reset buffer if nothing typed for 1.5s
+    rohanioTimeout = setTimeout(()=>{ rohanioBuffer = ''; }, 1500);
+  } else {
+    // Wrong key — start fresh from this char
+    rohanioBuffer = KONAMI.startsWith(ch) ? ch : '';
+    if(rohanioBuffer) rohanioTimeout = setTimeout(()=>{ rohanioBuffer = ''; }, 1500);
+  }
+});
+
+// Run command on Enter
+devInput.addEventListener('keydown', e => {
+  if(e.key === 'Enter'){
+    const raw = devInput.value.trim();
+    devInput.value = '';
+    if(!raw) return;
+    devRunCommand(raw);
+  }
+  if(e.key === 'Escape'){ devClose_fn(); }
+});
+
+function devRunCommand(raw){
+  const parts = raw.toLowerCase().split(/\s+/);
+  const cmd = parts[0];
+
+  // ── givecoins <n> ──
+  if(cmd === 'givecoins'){
+    const n = parseInt(parts[1]);
+    if(isNaN(n) || n <= 0){
+      devLog('Usage: givecoins <number>', 'err'); return;
+    }
+    shopCoinBalance += n;
+    shopSaveState();
+    // Also update HUD coin count if playing
+    document.getElementById('shopCoinBalance').textContent = shopCoinBalance;
+    devLog('Gave you ' + n + ' coins. Balance: ' + shopCoinBalance + ' 🪙', 'ok');
+    return;
+  }
+
+  // ── killhan ──
+  if(cmd === 'killhan'){
+    if(gameState !== 'playing'){
+      devLog('Start a game first, then use killhan', 'err'); return;
+    }
+    rohanDead = true;
+    // Move Rohan off screen into a wall tile where he can't path
+    ginger.x = -500; ginger.y = -500;
+    gingerPath = [];
+    devLog('Dr Rohan has been eliminated. Run free. 🎉', 'ok');
+    return;
+  }
+
+  devLog('Unknown command: ' + cmd, 'err');
+}
+
+
+// ══ MULTIPLAYER ══
+let mpPeer = null;       // our PeerJS instance
+let mpConn = null;       // the active DataConnection
+let mpRole = null;       // 'host' (rohan) or 'guest' (runner)
+let mpActive = false;    // currently in a multiplayer game
+
+// Generate a 4-digit numeric code from a PeerJS peer ID
+function mpMakeCode(){
+  // Random 4-digit string used as peer ID suffix
+  return String(Math.floor(1000 + Math.random()*9000));
+}
+
+function mpCodeToPeerId(code){
+  return 'drrohan-' + code;
+}
+
+function mpShowLobby(){
+  document.getElementById('mpRolePicker').style.display = 'flex';
+  document.getElementById('mpHostLobby').style.display = 'none';
+  document.getElementById('mpJoinLobby').style.display = 'none';
+  document.getElementById('mpSub').textContent = 'Choose your role';
+  showScreen('mpScreen');
+}
+
+// ── HOST ──
+document.getElementById('mpHostBtn').addEventListener('click', mpStartHost);
+function mpStartHost(){
+  document.getElementById('mpRolePicker').style.display = 'none';
+  document.getElementById('mpHostLobby').style.display = 'flex';
+  document.getElementById('mpCodeDisplay').textContent = '····';
+  document.getElementById('mpStatusDot').className = 'mp-dot mp-dot-waiting';
+  document.getElementById('mpStatusText').textContent = 'Generating code...';
+
+  if(mpPeer){ mpPeer.destroy(); mpPeer = null; }
+
+  const code = mpMakeCode();
+  const peerId = mpCodeToPeerId(code);
+  mpPeer = new Peer(peerId, { debug: 0 });
+
+  mpPeer.on('open', id => {
+    document.getElementById('mpCodeDisplay').textContent = code;
+    document.getElementById('mpStatusText').textContent = 'Waiting for player to join...';
+  });
+
+  mpPeer.on('connection', conn => {
+    mpConn = conn;
+    mpRole = 'host';
+    document.getElementById('mpStatusDot').className = 'mp-dot mp-dot-connected';
+    document.getElementById('mpStatusText').textContent = 'Player connected! Starting...';
+
+    conn.on('open', () => {
+      // Send initial game state to guest
+      setTimeout(() => {
+        mpActive = true;
+        // Host picks the map seed / exit tile and sends to guest
+        selectedVersion = VERSIONS[0];
+        rohanDead = false;
+        hardcoreMode = false; timedMode = false;
+        initGame();
+        // Tell guest the initial positions and coins
+        mpSend({ type:'start', exitTile, coins: coins.map(c=>({x:c.x,y:c.y})),
+                 playerStart:{x:player.x,y:player.y},
+                 gingerStart:{x:ginger.x,y:ginger.y} });
+        mpBeginGame();
+      }, 800);
+    });
+
+    conn.on('data', mpOnData);
+    conn.on('close', mpOnDisconnect);
+    conn.on('error', mpOnDisconnect);
+  });
+
+  mpPeer.on('error', err => {
+    document.getElementById('mpStatusText').textContent = 'Error: ' + err.type + '. Try again.';
+  });
+}
+
+// ── JOIN ──
+document.getElementById('mpJoinBtn').addEventListener('click', () => {
+  document.getElementById('mpRolePicker').style.display = 'none';
+  document.getElementById('mpJoinLobby').style.display = 'flex';
+  document.getElementById('mpJoinStatus').style.display = 'none';
+  document.getElementById('mpCodeInput').value = '';
+  setTimeout(()=>document.getElementById('mpCodeInput').focus(), 100);
+});
+
+document.getElementById('mpConnectBtn').addEventListener('click', mpDoJoin);
+document.getElementById('mpCodeInput').addEventListener('keydown', e => {
+  if(e.key === 'Enter') mpDoJoin();
+});
+
+function mpDoJoin(){
+  const code = document.getElementById('mpCodeInput').value.trim();
+  if(code.length !== 4){ return; }
+
+  document.getElementById('mpJoinStatus').style.display = 'flex';
+  document.getElementById('mpJoinDot').className = 'mp-dot mp-dot-waiting';
+  document.getElementById('mpJoinText').textContent = 'Connecting to host...';
+
+  if(mpPeer){ mpPeer.destroy(); mpPeer = null; }
+
+  mpPeer = new Peer({ debug: 0 });
+  mpPeer.on('open', myId => {
+    const hostId = mpCodeToPeerId(code);
+    mpConn = mpPeer.connect(hostId, { reliable: true });
+
+    mpConn.on('open', () => {
+      mpRole = 'guest';
+      document.getElementById('mpJoinDot').className = 'mp-dot mp-dot-connected';
+      document.getElementById('mpJoinText').textContent = 'Connected! Waiting for host...';
+    });
+
+    mpConn.on('data', mpOnData);
+    mpConn.on('close', mpOnDisconnect);
+    mpConn.on('error', () => {
+      document.getElementById('mpJoinText').textContent = 'Could not connect. Check the code.';
+      document.getElementById('mpJoinDot').className = 'mp-dot mp-dot-waiting';
+    });
+  });
+
+  mpPeer.on('error', err => {
+    document.getElementById('mpJoinText').textContent = 'Error: ' + err.type;
+  });
+}
+
+// ── MESSAGING ──
+function mpSend(data){
+  if(mpConn && mpConn.open) mpConn.send(data);
+}
+
+function mpOnData(data){
+  if(data.type === 'start'){
+    // Guest receives map state from host and starts game
+    selectedVersion = VERSIONS[0];
+    rohanDead = false; hardcoreMode = false; timedMode = false;
+    initGame();
+    // Apply host's exact positions & coins
+    player.x = data.playerStart.x; player.y = data.playerStart.y;
+    ginger.x = data.gingerStart.x; ginger.y = data.gingerStart.y;
+    exitTile = data.exitTile;
+    coins = data.coins.map(c=>({x:c.x,y:c.y,collected:false}));
+    mpActive = true;
+    mpBeginGame();
+  }
+  else if(data.type === 'rohanPos'){
+    // Guest updates Rohan's position from host input
+    ginger.x = data.x; ginger.y = data.y; ginger.facing = data.facing;
+  }
+  else if(data.type === 'playerPos'){
+    // Host updates runner position from guest input
+    player.x = data.x; player.y = data.y; player.facing = data.facing;
+    player.running = data.running;
+  }
+  else if(data.type === 'coinCollected'){
+    if(coins[data.idx]) coins[data.idx].collected = true;
+  }
+  else if(data.type === 'caught'){
+    // Runner got caught — show death on runner device, cutscene on both
+    gameState = 'cutscene'; cutsceneTimer = 0; cutscenePhase = 0;
+  }
+  else if(data.type === 'escaped'){
+    gameState = 'escaped';
+    mpEndGame(false);
+    showScreen('escapeScreen');
+    document.getElementById('escapeTimeLabel').style.display='none';
+    document.getElementById('escapeCoinLabel').textContent='';
+  }
+  else if(data.type === 'disconnect'){
+    mpOnDisconnect();
+  }
+}
+
+function mpOnDisconnect(){
+  if(!mpActive) return;
+  mpActive = false;
+  alert('Other player disconnected.');
+  mpEndGame(true);
+  goHome();
+}
+
+// ── GAME START ──
+function mpBeginGame(){
+  gameState = 'playing';
+  showScreen(null);
+  document.getElementById('hcBadge').style.display = 'none';
+  document.getElementById('coinHUD').style.display = selectedVersion.hasCoins ? 'flex' : 'none';
+  document.getElementById('timerHUD').style.display = 'none';
+  const roleHUD = document.getElementById('mpRoleHUD');
+  roleHUD.style.display = 'flex';
+  roleHUD.textContent = mpRole === 'host' ? '🩺 You are Dr Rohan' : '🏃 You are the Runner';
+  if(animFrame) cancelAnimationFrame(animFrame);
+  loop();
+}
+
+function mpEndGame(cleanUp){
+  mpActive = false;
+  document.getElementById('mpRoleHUD').style.display = 'none';
+  if(cleanUp && mpPeer){ mpPeer.destroy(); mpPeer = null; mpConn = null; }
+}
+
+// ── OVERRIDE update() for multiplayer ──
+// We wrap the existing update in mpUpdate which handles roles
+function update(){
+  if(!mpActive){ _updateSolo(); return; }
+  if(gameState !== 'playing') return;
+
+  if(mpRole === 'host'){
+    // HOST controls Rohan (ginger) with WASD/joystick
+    const spd = 2.8;
+    let dx=0,dy=0;
+    if(isMobile){dx=joystickDX;dy=joystickDY;}
+    else{if(keys['ArrowLeft']||keys['a']||keys['A'])dx-=1;if(keys['ArrowRight']||keys['d']||keys['D'])dx+=1;if(keys['ArrowUp']||keys['w']||keys['W'])dy-=1;if(keys['ArrowDown']||keys['s']||keys['S'])dy+=1;}
+    const len=Math.sqrt(dx*dx+dy*dy);if(len>0){dx/=len;dy/=len;}
+    const nx=ginger.x+dx*spd,ny=ginger.y+dy*spd;
+    if(!collidesWithWall(nx,ginger.y,GINGER_R-2))ginger.x=nx;
+    if(!collidesWithWall(ginger.x,ny,GINGER_R-2))ginger.y=ny;
+    if(dx!==0)ginger.facing=dx>0?1:-1;
+
+    // Camera follows Rohan for host
+    camX=Math.max(0,Math.min(MAP_W*TILE-W,ginger.x-W/2));
+    camY=Math.max(0,Math.min(MAP_H*TILE-H,ginger.y-H/2));
+
+    // Send Rohan position to guest
+    mpSend({type:'rohanPos',x:ginger.x,y:ginger.y,facing:ginger.facing});
+
+    // Check if Rohan caught the runner
+    const dist=Math.hypot(player.x-ginger.x,player.y-ginger.y);
+    const catchDist = selectedVersion.hasKillRadius ? KILL_RADIUS : PLAYER_R+GINGER_R;
+    if(dist < catchDist){
+      gameState='cutscene'; cutsceneTimer=0; cutscenePhase=0;
+      mpSend({type:'caught'});
+    }
+
+    axeSwing=Math.sin(Date.now()*.012)*.5;
+    spookFactor=0;
+
+  } else {
+    // GUEST controls the runner (player) with WASD/joystick
+    const sprinting = selectedVersion.hasSprint&&(keys['Shift']||sprintPressed)&&stamina>0;
+    stamina=sprinting?Math.max(0,stamina-.8):Math.min(100,stamina+.3);
+    document.getElementById('stamina-fill').style.width=stamina+'%';
+    const spd=sprinting?5.5:3.2;
+    let dx=0,dy=0;
+    if(isMobile){dx=joystickDX;dy=joystickDY;}
+    else{if(keys['ArrowLeft']||keys['a']||keys['A'])dx-=1;if(keys['ArrowRight']||keys['d']||keys['D'])dx+=1;if(keys['ArrowUp']||keys['w']||keys['W'])dy-=1;if(keys['ArrowDown']||keys['s']||keys['S'])dy+=1;}
+    const len=Math.sqrt(dx*dx+dy*dy);if(len>0){dx/=len;dy/=len;}
+    player.running=len>0;if(dx!==0)player.facing=dx>0?1:-1;
+    const nx=player.x+dx*spd,ny=player.y+dy*spd;
+    if(!collidesWithWall(nx,player.y,PLAYER_R))player.x=nx;
+    if(!collidesWithWall(player.x,ny,PLAYER_R))player.y=ny;
+
+    // Camera follows runner for guest
+    camX=Math.max(0,Math.min(MAP_W*TILE-W,player.x-W/2));
+    camY=Math.max(0,Math.min(MAP_H*TILE-H,player.y-H/2));
+
+    // Send player position to host
+    mpSend({type:'playerPos',x:player.x,y:player.y,facing:player.facing,running:player.running});
+
+    // Coin collection
+    if(selectedVersion.hasCoins){
+      coins.forEach((c,idx)=>{
+        if(c.collected) return;
+        if(Math.hypot(player.x-c.x,player.y-c.y)<PLAYER_R+COIN_R){
+          c.collected=true; coinsCollected++;
+          document.getElementById('coinCount').textContent=coinsCollected;
+          mpSend({type:'coinCollected',idx});
+        }
+      });
+    }
+
+    // Proximity spook for runner
+    const dist=Math.hypot(player.x-ginger.x,player.y-ginger.y);
+    spookFactor=Math.max(0,1-dist/(KILL_RADIUS*3.5));
+    axeSwing=dist<200?Math.sin(Date.now()*.012)*.5:Math.sin(Date.now()*.003)*.15;
+
+    // Exit detection for runner
+    if(selectedVersion.hasExit){
+      const ex=(exitTile.tx+0.5)*TILE,ey=(exitTile.ty+0.5)*TILE;
+      if(Math.hypot(player.x-ex,player.y-ey)<PLAYER_R+TILE*0.55){
+        gameState='escaped';
+        mpSend({type:'escaped'});
+        mpEndGame(false);
+        showScreen('escapeScreen');
+        document.getElementById('escapeTimeLabel').style.display='none';
+        document.getElementById('escapeCoinLabel').textContent=selectedVersion.hasCoins?'🪙 COINS: '+coinsCollected:'';
+      }
+    }
+  }
+}
+
+// ── BACK / CLEANUP ──
+document.getElementById('mpBackBtn').addEventListener('click', ()=>{
+  if(mpPeer){ mpPeer.destroy(); mpPeer=null; mpConn=null; }
+  showScreen('modeScreen');
+});
+
+document.getElementById('multiCard').addEventListener('click', mpShowLobby);
+
 </script>
 </body>
 </html>
