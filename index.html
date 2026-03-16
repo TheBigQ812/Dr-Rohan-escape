@@ -601,6 +601,40 @@
     text-shadow:0 0 10px rgba(0,200,255,0.7);
   }
 
+
+  /* ══ VISIT BAR ══ */
+  #visitBar {
+    position:absolute; top:0; left:0; right:0; z-index:4;
+    text-align:center; padding:8px 0;
+    font-family:'Special Elite',monospace; font-size:clamp(10px,2.5vw,13px);
+    letter-spacing:5px; color:rgba(255,180,210,0.5);
+    background:rgba(0,0,0,0.25);
+    border-bottom:1px solid rgba(255,100,180,0.1);
+    text-shadow:0 0 10px rgba(255,100,180,0.3);
+  }
+  #visitBar span { color:rgba(255,180,210,0.85); }
+
+  /* ══ VISIT BAR ══ */
+  #visitBar {
+    position:absolute; top:0; left:0; right:0; z-index:4;
+    background:rgba(0,0,0,0.35);
+    border-bottom:1px solid rgba(255,100,180,0.18);
+    padding:7px 20px;
+    display:flex; align-items:center; justify-content:center;
+    backdrop-filter:blur(6px);
+  }
+  #visitBarText {
+    font-family:'Special Elite',monospace;
+    font-size:clamp(9px,2vw,12px);
+    letter-spacing:4px;
+    color:rgba(255,180,210,0.6);
+    text-transform:uppercase;
+  }
+  #visitBarText span {
+    color:#ff88cc;
+    text-shadow:0 0 10px rgba(255,100,180,0.5);
+  }
+
   /* ══ DEV CONSOLE ══ */
   #devConsole {
     position:fixed; bottom:0; left:0; right:0; z-index:9999;
@@ -746,6 +780,9 @@
 
 <!-- ══ HOME ══ -->
 <div id="homeScreen" class="screen active">
+  <div id="visitBar">
+    <span id="visitBarText">👥 Loading visits...</span>
+  </div>
   <div class="home-blob home-blob-1"></div>
   <div class="home-blob home-blob-2"></div>
   <div class="home-blob home-blob-3"></div>
@@ -1560,6 +1597,8 @@ const storage = {
     try{ localStorage.setItem(key, value); return {value}; }catch(e){ return null; }
   }
 };
+
+
 
 // ══ LEADERBOARD ══
 const LB_KEY = 'lb_timed_scores';
@@ -2490,6 +2529,22 @@ document.getElementById('mpBackBtn').addEventListener('click', ()=>{
 });
 
 document.getElementById('multiCard').addEventListener('click', mpShowLobby);
+
+// ══ VISIT COUNTER ══
+const VISIT_COUNTER_KEY = 'drrohan_total_visits_v1';
+async function initVisitCounter(){
+  try {
+    // Increment shared visit count
+    const r = await storage.get(VISIT_COUNTER_KEY, true);
+    const prev = r ? parseInt(r.value)||0 : 0;
+    const next = prev + 1;
+    await storage.set(VISIT_COUNTER_KEY, String(next), true);
+    document.getElementById('visitBarText').innerHTML = '👥 <span>' + next.toLocaleString() + '</span> visits';
+  } catch(e){
+    document.getElementById('visitBarText').textContent = '👥 visits';
+  }
+}
+initVisitCounter();
 
 </script>
 </body>
